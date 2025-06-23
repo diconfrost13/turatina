@@ -1,0 +1,60 @@
+//===============================================//
+//  This script is made by Diconfrost VaNz       //
+//  https://www.facebook.com/diconfrost13    	 //
+//  https://www.facebook.com/diconfrostvanz	 //
+//                   		                 //
+//===============================================//
+
+prontera,168,200,4,	script	LHZ Dungeon	405,{
+		set .lhzdnpc$, "LHZ Dungeon";
+
+        if ( !getcharid(1) ) {
+		
+		mes "[ ^000099"+.lhzdnpc$+"^000000 ]";
+		mes "Hi ^0000FF"+ strcharinfo(0) +"^000000!";
+                mes "You want to challenge the LHZ Bosses but you don't have a party......";
+		next;
+		mes "[ ^000099"+.lhzdnpc$+"^000000 ]";
+		mes "You need a party composed of 3 people to raid the bosses.";
+		mes "Come back and I'll wait for you.";
+                close;
+        }
+ 
+        getpartymember getcharid(1),2;
+ 
+        // Party Player
+        if ( $@partymembercount < 3 ) {
+		mes "[ ^000099"+.lhzdnpc$+" ]";
+                mes "Please form a group of 3 or more players to continue. You can't enter here all alone.";
+                close;
+        }
+     
+     
+       for ( set .@i,0; .@i < $@partymembercount; set .@i,.@i + 1 ) {
+                if ( !isloggedin( $@partymemberaid[.@i] ) ) continue;
+                set .@islogin, .@islogin + 1;
+        }
+        if ( .@islogin < 3 ) { // Party Player Online
+		mes "[ "+.lhzdnpc$+" ]";
+                mes "Minimum 3 players in the party must be online to continue";
+                close;
+        }
+     
+     
+    copyarray .@partymembercid, $@partymembercid, .register_num;
+     
+    mes "Are you ready?";
+    next;
+switch(select("Yes","No")) {
+
+case 1:
+warp "lhz_dun03",68,75;
+end;
+
+
+case 2:
+mes "Then not";
+break;
+
+            }
+    }

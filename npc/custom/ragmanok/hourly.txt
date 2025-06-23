@@ -1,0 +1,70 @@
+-	script	hourlypoints1	-1,{
+    
+OnPointGet:
+	//Check for idle.
+	//while(BaseLevel < 1) {
+	while(checkvending() >= 1) {
+	if( .@mes$ == "" ) {
+		//dispbottom set( .@mes$, "The hourly points event stopped because you were low level!" );
+		dispbottom set( .@mes$, "The hourly points event stopped because you were vending!" );
+		set @hourly_points_timer, 0;
+	}
+	sleep2 .delay;
+	}
+	
+	@consecutive_timer++;
+	.@time_string$ = Time2Str( @consecutive_timer * ( .timer / 1000 ) );
+	dispbottom "You received "+.points+" Hourly Point(s) by staying ingame for 1 hour.";
+	#HourlyRewards = #HourlyRewards + .points;
+	dispbottom "Current Balance = "+#HourlyRewards+" Hourly Point(s)";
+	@consecutive_bonus++;
+
+	//Check for consecutive timer.
+	if(@consecutive_bonus == .cdelay) {
+		@consecutive_bonus = 0;
+		#HourlyRewards = #HourlyRewards + .cpoints;
+		dispbottom "You receive a bonus "+.cpoints+" Hourly Point(s) by playing for minimum 3 hours consecutively!!!";
+		dispbottom "Current Balance = "+#HourlyRewards+" Hourly Point(s)";
+	}
+
+	
+OnPCLoginEvent:
+	addtimer .timer,"hourlypoints1::OnPointGet";
+	@hourly_points_timer = gettimetick(2) + ( .timer / 1000 );
+	end;
+	
+OnCheck:
+	message strcharinfo(0),@hourly_points_timer ? Time2Str( @hourly_points_timer )+" Remaining.":"Something went wrong relog!";
+	dispbottom "Current Points: "+#HourlyRewards+" Hourly Point(s)";
+	end;
+
+OnInit:
+	bindatcmd "hourly","hourlypoints1::OnCheck"; //@hourly to view time till next point.
+	bindatcmd "hrlysetup",strnpcinfo(0)+"::OnSetupCommand",60,99;
+	.timer   = 1000*60*60; //Timer in milliseconds. ( Default: 1000*60*60 [ = 1 Hour ] )
+	.cdelay  = 3;          //Delay before receiving the consecutive bonus. ( Default: 3 [ { ~ 3 Hours } *Using default timer ] )
+	.cpoints = 4;         //Points gained for consecutive time online. ( Default: 10 )
+	.points  = 1;          //Normal points gained. ( Default: 1 )
+	.delay   = 5000;       //Delay for idle re-check check. ( Default: 1000 [ = 1 Second ] )
+	.idle    = 60*5;       //Player is idle after not moving for this many seconds. ( Default: 60*5 [ = 5 Minutes ] )
+}
+
+clangroup,243,22,5	script	Hourly Points [Shop]	58,{
+	mes "^FFA500[Hourly Points Shop]^000000";
+	mes "You can spend your Hourly Points here";
+	mes "^FFFFFF_^000000";
+	set #HourlyRewards,(#HourlyRewards+@KOEPOINTS);
+	set @KOEPOINTS,0;
+	mes "You current points: ^0000FF"+#HourlyRewards+"^000000";
+	callshop "HRLYPOINTS",1;
+	end;
+OnPCLogoutEvent:
+	set #HourlyRewards,(#HourlyRewards+@HRLYPOINTS);
+end;
+
+OnInit:
+	while(1){ sleep 1000; showscript "Hourly Shop"; }
+end;
+}
+//ADD YOUR ITEMS HERE
+-	pointshop	HRLYPOINTS	-1,#HourlyRewards,607:10,608:10

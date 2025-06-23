@@ -1,0 +1,15 @@
+-	script	atcommand_main	-1,{
+	OnAtStorage:
+		.@map$ = strcharinfo(3);
+		if ( getmapflag( .@map$,mf_pvp ) || getmapflag( .@map$,mf_gvg ) ) {
+			dispbottom .@atcmd_command$+" is not allowed in PvP and GvG Maps";
+		}
+		else {
+			openstorage;
+		}
+		end;
+	
+	OnInit:
+		bindatcmd "storage",strnpcinfo(3)+"::OnAtStorage";
+		end;
+}

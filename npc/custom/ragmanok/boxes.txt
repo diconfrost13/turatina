@@ -1,0 +1,187 @@
+function	script	GWoEBox	{
+ set .@GWTotal,12;    
+        setarray .@GW1[0],1,1230,1; //Ice Pick
+        setarray .@GW2[0],1,5135,1; //Cyclops
+        setarray .@GW3[0],1,4365,1; // HW Card
+        setarray .@GW4[0],1,4451,1; // Crothen Card
+        setarray .@GW5[0],1,18885,1; // Jejecap
+        setarray .@GW6[0],1,20036,1; // Sword Master Crown
+        setarray .@GW7[0],1,4357,1; // LK Card
+        setarray .@GW8[0],1,4403,1; // kiel card
+        setarray .@GW9[0],20,12210,20; // BGUM
+        setarray .@GW10[0],30,7227,20; // TCG
+        setarray .@GW11[0],100,7227,2; // TCG
+        setarray .@GW12[0],100,7227,2; // TCG
+    do{
+        set .@gwi, rand(1,.@GWTotal);
+    }while( rand(1,100) > getd(".@GW"+.@gwi+"[0]") );
+    
+    for(set .@gwj,1; .@gwj<getarraysize(getd(".@GW"+.@gwi)); set .@gwj,.@gwj+2)
+    {
+        getitem getd(".@GW"+.@gwi+"["+.@gwj+"]"), getd(".@GW"+.@gwi+"["+(.@gwj+1)+"]");
+        if (!.@gwk[0])
+        {
+            set .@gwp,.@gwi;
+            setarray .@gwk[0], getd(".@GW"+.@gwi+"["+.@gwj+"]"), getd(".@GW"+.@gwi+"["+(.@gwj+1)+"]");
+            break;
+        }
+    }
+    if( .@gwp && .@gwp <= 10 ) // 10% equal or below will announce
+    announce "Congratulations! "+strcharinfo(0)+" just received "+getitemname(.@gwk[0])+" x "+.@gwk[1]+" from WoE Treasure Box",0;
+    specialeffect2 248;
+    
+
+
+
+}
+
+
+function	script	WoEBox	{
+ set .@WTotal,12;    
+        setarray .@W1[0],1,1230,1; //Ice Pick
+        setarray .@W2[0],1,5135,1; //Cyclops
+        setarray .@W3[0],1,4365,1; // HW Card
+        setarray .@W4[0],1,4451,1; // Crothen Card
+        setarray .@W5[0],1,18885,1; // Jejecap
+        setarray .@W6[0],1,20036,1; // Sword Master Crown
+        setarray .@W7[0],1,4357,1; // LK Card
+        setarray .@W8[0],1,4403,1; // kiel card
+        setarray .@W9[0],20,12210,20; // BGUM
+        setarray .@W10[0],30,7227,20; // TCG
+        setarray .@W11[0],100,7227,2; // TCG
+        setarray .@W12[0],100,7227,2; // TCG
+    do{
+        set .@wi, rand(1,.@WTotal);
+    }while( rand(1,100) > getd(".@W"+.@wi+"[0]") );
+    
+    for(set .@wj,1; .@wj<getarraysize(getd(".@W"+.@wi)); set .@wj,.@wj+2)
+    {
+        getitem getd(".@W"+.@wi+"["+.@wj+"]"), getd(".@W"+.@wi+"["+(.@wj+1)+"]");
+        if (!.@wk[0])
+        {
+            set .@wp,.@wi;
+            setarray .@wk[0], getd(".@W"+.@wi+"["+.@wj+"]"), getd(".@W"+.@wi+"["+(.@wj+1)+"]");
+            break;
+        }
+    }
+    if( .@wp && .@wp <= 10 ) // 10% equal or below will announce
+    announce "Congratulations! "+strcharinfo(0)+" just received "+getitemname(.@wk[0])+" x "+.@wk[1]+" from WoE Box",0;
+    specialeffect2 248;
+    
+
+
+
+}
+
+function	script	fish	{
+ set .@FishT,12;    
+        setarray .@F1[0],9,1230,1; //Ice Pick
+        setarray .@F2[0],1,41076,1; //Cyclops
+        setarray .@F3[0],1,42806,1; // HW Card
+        setarray .@F4[0],1,42513,1; // Crothen Card
+        setarray .@F5[0],1,42514,1; // Jejecap
+        setarray .@F6[0],1,41050,1; // Sword Master Crown
+        setarray .@F7[0],1,41099,1; // LK Card
+        setarray .@F8[0],1,41098,1; // kiel card
+        setarray .@F9[0],2,6615,10; // BGUM
+        setarray .@F10[0],10,7227,10; // TCG
+        setarray .@F11[0],80,969,2; // TCG
+        setarray .@F12[0],100,607,1; // TCG
+    do{
+        set .@Fi, rand(1,.@FishT);
+    }while( rand(1,100) > getd(".@F"+.@Fi+"[0]") );
+    
+    for(set .@Fj,1; .@Fj<getarraysize(getd(".@F"+.@Fi)); set .@Fj,.@Fj+2)
+    {
+        getitem getd(".@F"+.@Fi+"["+.@Fj+"]"), getd(".@F"+.@Fi+"["+(.@Fj+1)+"]");
+        if (!.@Fk[0])
+        {
+            set .@Fp,.@Fi;
+            setarray .@Fk[0], getd(".@F"+.@Fi+"["+.@Fj+"]"), getd(".@F"+.@Fi+"["+(.@Fj+1)+"]");
+            break;
+        }
+    }
+    if( .@Fp && .@Fp <= 10 ) // 10% equal or below will announce
+    announce "Congratulations! "+strcharinfo(0)+" just received "+getitemname(.@Fk[0])+" x "+.@Fk[1]+" from Pet Egg Scroll",0;
+    specialeffect2 248;
+    
+
+
+
+}
+
+
+function	script	CustomBox	{
+ set .@CBT,12;    
+        setarray .@CB1[0],1,15250,1; 
+        setarray .@CB2[0],1,42808,1; 
+        setarray .@CB3[0],1,42803,1; 
+        setarray .@CB4[0],1,42798,1; 
+        setarray .@CB5[0],1,42797,1; 
+        setarray .@CB6[0],1,42794,1; 
+        setarray .@CB7[0],1,42793,1;
+        setarray .@CB8[0],1,42791,1;
+        setarray .@CB9[0],20,60037,1;
+        setarray .@CB10[0],45,6615,1;
+        setarray .@CB11[0],80,607,1;
+        setarray .@CB12[0],100,607,1;
+    do{
+        set .@CBi, rand(1,.@CBT);
+    }while( rand(1,100) > getd(".@CB"+.@CBi+"[0]") );
+    
+    for(set .@CBj,1; .@CBj<getarraysize(getd(".@CB"+.@CBi)); set .@CBj,.@CBj+2)
+    {
+        getitem getd(".@CB"+.@CBi+"["+.@CBj+"]"), getd(".@CB"+.@CBi+"["+(.@CBj+1)+"]");
+        if (!.@CBk[0])
+        {
+            set .@CBp,.@CBi;
+            setarray .@CBk[0], getd(".@CB"+.@CBi+"["+.@CBj+"]"), getd(".@CB"+.@CBi+"["+(.@CBj+1)+"]");
+            break;
+        }
+    }
+    if( .@CBp && .@CBp <= 10 ) // 10% equal or below will announce
+    announce "Congratulations! "+strcharinfo(0)+" just received "+getitemname(.@CBk[0])+" x "+.@CBk[1]+".",0;
+    specialeffect2 248;
+    
+
+
+}
+
+function	script	CustomBox2	{
+ set .@CB2T,12;    
+        setarray .@CB21[0],1,41163,1; 
+        setarray .@CB22[0],1,41150,1;
+        setarray .@CB23[0],1,41151,1; 
+        setarray .@CB24[0],1,41153,1;
+        setarray .@CB25[0],1,41159,1; 
+        setarray .@CB26[0],1,41207,1; 
+        setarray .@CB27[0],44,501,1; 
+        setarray .@CB28[0],57,502,1; 
+        setarray .@CB29[0],20,619,1; 
+        setarray .@CB210[0],45,504,1;
+        setarray .@CB211[0],80,505,1; 
+        setarray .@CB212[0],100,503,1;
+    do{
+        set .@CB2i, rand(1,.@CB2T);
+    }while( rand(1,100) > getd(".@CB2"+.@CB2i+"[0]") );
+    
+    for(set .@CB2j,1; .@CB2j<getarraysize(getd(".@CB2"+.@CB2i)); set .@CB2j,.@CB2j+2)
+    {
+        getitem getd(".@CB2"+.@CB2i+"["+.@CB2j+"]"), getd(".@CB2"+.@CB2i+"["+(.@CB2j+1)+"]");
+        if (!.@CB2k[0])
+        {
+            set .@CB2p,.@CB2i;
+            setarray .@CB2k[0], getd(".@CB2"+.@CB2i+"["+.@CB2j+"]"), getd(".@CB2"+.@CB2i+"["+(.@CB2j+1)+"]");
+            break;
+        }
+    }
+    if( .@CB2p && .@CB2p <= 10 ) // 10% equal or below will announce
+    announce "Congratulations! "+strcharinfo(0)+" just received "+getitemname(.@CB2k[0])+" x "+.@CB2k[1]+".",0;
+    specialeffect2 248;
+    
+
+
+
+}
+
+

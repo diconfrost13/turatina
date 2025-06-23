@@ -1,0 +1,26 @@
+###########################################################################
+# Player bonus Database
+###########################################################################
+#
+# Player bonus Settings
+#
+###########################################################################
+# - Job : Use constant JOB_* from src/map/script_constants.hpp
+#   Script : Script like used for items
+#
+#   OR
+#
+# - Char : Put a char ID to give him specials bonus
+#   Script : Script like used for items
+#
+#   OR
+#
+# - Account : Put an account ID to give to all his chars specials bonus
+#   Script : Script like used for items
+###########################################################################
+
+Header:
+  Type: PLAYER_BONUS
+  Version: 1
+
+Body:

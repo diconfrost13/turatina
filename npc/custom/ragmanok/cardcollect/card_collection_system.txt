@@ -1,0 +1,540 @@
+clangroup,258,54,5	script	Zondaoyaji::CARDNPC	833,{
+
+    
+	mes .NPC$;
+	mes "Hi! "+strcharinfo(0)+".";
+	mes "Welcome to Card Collection System.";
+	next;
+	mes "[^FF0000Notice^000000]:";
+	mes "When you deposit some of the cards, they become unredeemable and will be bound forever in your character.";
+	
+	menu "Card Deposit" ,DEPOSITE, 
+		 "Card Withdraw",WITHDRAW,
+	     "Information"  ,INFORMATION;
+		 
+	DEPOSITE:
+		next;
+		soundeffect "click.wav",1;
+		mes .NPC$;
+		mes "What Collection do you want to see?";
+		 
+		for( .@i = 0; .@i < getarraysize(.MAP_LIST$); .@i++ ) 
+		{
+			.var_map$[0] = "map_"+ .@i;
+			.@menu$ = .@menu$ + ( (getd(.var_map$[0])) ? "- ^008800"+.MAP_LIST$[.@i]+" Collection ["+ getd(.var_map$[0]) +"].^000000" : "- ["+.@i+"] ^FF0000"+.MAP_LIST$[.@i]+" Collection ["+ getd(.var_map$[0]) +"]^000000" ) +":";
+		}
+		.@select = select( .@menu$ ) - 1;
+		
+		next;
+		explode(.@card_selected$, .card_collections$[.@select], "|");		
+		explode(.@effects$, .unlock_effect$[.@select], "|");	
+		
+		soundeffect "click.wav",1;
+		.var_map$[0] = "map_"+.@select+"";			
+		cutin "map_"+ .@select +"_"+ getd(.var_map$[0]),1;
+		
+		mes .NPC$; 				
+	    .count_card_collection = getarraysize(.@card_selected$);
+		
+		if(getd(.var_map$[0]) == .count_card_collection){
+			mes "^0088FF"+.MAP_LIST$[.@select]+" Collection is Completed^000000.";
+			mes "[^30ad8aDeposit Reward^000000]"; 
+			
+			for(.@a = 0; .@a < getarraysize(.@card_selected$); .@a +=1){				
+				.ef_counter = (.@a);		
+				mes "["+ (.ef_counter+1) +"]: "+ getitemname(atoi(.@card_selected$[.@a])) +" ";				
+				mes "^0000FF> ^FF7F50"+ .@effects$[.@a] +"^000000"; 
+			}
+					
+			mes "- - - - - - - - - -";
+			close2;     
+			end;
+		}
+		
+		mes "What card do you want to Deposit?";	
+		mes "[^30ad8a "+.count_card_collection+" "+.MAP_LIST$[.@select]+" Collection^000000]";
+		for(.@a = 0; .@a < getarraysize(.@card_selected$); .@a +=1){ 
+			.var_cards$[0] = "collection_"+ atoi(.@card_selected$[.@a]);	
+			.count_cards = countitem(atoi(.@card_selected$[.@a]));
+			if(getd(.var_cards$[0])){
+				mes "["+(.@a+1)+"]: "+((getd(.var_cards$[0]) != 0) ? "^008800"+getitemname(atoi(.@card_selected$[.@a]))+"^000000 [collected]":"^FF0000"+getitemname(atoi(.@card_selected$[.@a]))+"^000000");	
+				mes "^0000FF> Deposit Reward:^FF7F50"+ .@effects$[.@a] +"^000000"; 
+			}else{
+				mes "["+(.@a+1)+"]: "+((.count_cards != 0) ? "^008800"+getitemname(atoi(.@card_selected$[.@a]))+"^000000":"^FF0000"+getitemname(atoi(.@card_selected$[.@a]))+"^000000");
+				mes "^0000FF> Deposit Reward:^FF7F50"+ .@effects$[.@a] +"^000000"; 				
+			}
+				
+		}
+		
+		next;
+			soundeffect "click.wav",1;
+			mes .NPC$;  
+			mes "^30ad8a"+.MAP_LIST$[.@select]+" Card Collection^000000.";
+			mes "Select the card if you have?";			
+			for(.@a = 0; .@a < getarraysize(.@card_selected$); .@a += 1)
+			{
+				.var_cards$[0] = "collection_"+ atoi(.@card_selected$[.@a]);
+				.count_cards = countitem(atoi(.@card_selected$[.@a]));
+				if(getd(.var_cards$[0])){
+					.@menus$ = .@menus$ + ( (getd(.var_cards$[0]) != 0) ? "- ^008000"+ getitemname(atoi(.@card_selected$[.@a])) +" ^000000 [^0088eeCollected^000000]" : "-> ^FF0000"+  getitemname(atoi(.@card_selected$[.@a])) +" ^000000" ) +":";
+				}else{
+					.@menus$ = .@menus$ + ( (.count_cards >= .fsu_card_deposit) ? "-> [Deposit] ^008000"+ getitemname(atoi(.@card_selected$[.@a])) +" ^000000" : "-> ^FF0000"+  getitemname(atoi(.@card_selected$[.@a])) +" ^000000" ) +":";
+				}
+			}		
+			.@selected = select( .@menus$ ) - 1;
+		
+		next;
+			soundeffect "click.wav",1;		
+			.item_id = atoi(.@card_selected$[.@selected]);			
+			.var_cards$[0] = "collection_"+.item_id;
+			//cutin "card_illust(.item_id)", 1;		
+			
+			mes .NPC$;
+			mes "^008800"+.MAP_LIST$[.@select]+" Card Collection^000000 ";			
+			mes "You select ^006600"+ getitemname(.item_id) +"^000000.";	
+			
+			if(getd(.var_cards$[0])){
+				specialeffect2 62;
+				mes "- - - - - - - - - -";
+				mes "^FF0000This card is already on your collection^000000.";
+				close2;     
+				end;
+			}
+			 
+			mes "Checking card collection....";
+			sleep2 1000;
+			specialeffect2 9;
+			sleep2 1000;
+			specialeffect2 9;
+			sleep2 1000;
+			specialeffect2 9;
+			 
+			if(countitem(.item_id) >= .fsu_card_deposit){
+				mes "- - - - - - - - - -";
+				mes "^008900You got "+ getitemname(atoi(.@card_selected$[.@selected])) +"^000000."; 
+				mes "Do you want to deposit this card?";	
+				
+				menu "Yes Sure...",SURE,"No Thanks.",NOTHX;			
+			}else{
+				specialeffect2 62;
+				mes "- - - - - - - - - -";
+				mes "^FF0000Sorry! you dont have enough cards on your inventory...";
+				if(countitem(.item_id) == 0){
+					mes "You have nothing. you need ^FF0000"+.fsu_card_deposit+"pcs^000000. ";
+				}else{
+					mes "You have "+countitem(.item_id)+"x. you need ^FF0000"+.fsu_card_deposit+"pcs^000000. ";
+				}
+				
+				close2;     
+				end;
+			}
+			
+			
+		end;
+		 
+		SURE:
+			next;
+			if (getgmlevel() < .maintenance){
+				mes "[Game Master]";
+				mes "^FF0000Sorry this is under maintenance.",
+					"come back again later "+strcharinfo(0)+".";
+				close2;     
+				end;
+			}
+			 
+			soundeffect "click.wav",1;
+				
+			if(countitem(.item_id) < .fsu_card_deposit){
+				mes .NPC$;
+				mes "^0000FFCard is not enough amount. ";
+				mes "card required "+ .fsu_card_deposit +"^000000.";
+					close2;     
+				end;
+			}
+			
+			if(.zeny_deposit_cost){
+				if(.zeny_deposit_cost > Zeny){
+					mes .NPC$;
+					mes "^FF0000You dont have enough zeny to deposite this card^000000.";
+					mes "Requirede Zeny: "+F_InsertComma(.zeny_deposit_cost)+"z";
+					close2;     
+					end;
+				}
+			}
+								
+			specialeffect2 65;
+			specialeffect2 66;
+			sleep2 500;
+			specialeffect2 78;
+			sleep2 500;
+			specialeffect2 83;
+			sleep2 500;
+			specialeffect2 84;
+			sleep2 500;
+			specialeffect2 86;
+			sleep2 500;
+			specialeffect2 91;
+			
+			mes .NPC$;
+			mes "The ^FF8800"+ getitemname(.item_id) +"^000000 is ^008800successfully deposit on your Card Collection^000000.";
+			mes "[^0088eeDeposite Reward^000000]";
+			
+			// SET DATA CHARACTER BOUND
+			.var_map$[0] = "map_"+.@select+"";	
+			.var_cards$[0] = "collection_"+.item_id;		
+			
+			setd .var_map$[0], getd(.var_map$[0]) + 1;				
+			setd .var_cards$[0], getd(.var_cards$[0]) + 1;
+			
+			for(.@ef = 0; .@ef < getarraysize(.@card_selected$[.@selected]); .@ef +=1){
+				if(atoi(.@card_selected$[.@ef]) == .item_id){
+					mes "- ^FF8000 "+.@effects$[.@ef]+" Unloked^000000.";		
+				} 
+			}
+			
+			//DELETE ITEMS
+			delitem .item_id, .fsu_card_deposit;
+			if(.zeny_deposit_cost){ 
+				Zeny -= .zeny_deposit_cost; 
+			}
+			
+			if(!COLLECTION_PERMIT){
+				set COLLECTION_PERMIT, 1;
+				getitem .permit_item_id[0], .permit_item_id[1];
+			}
+							
+			//COMPLETE COLLECTION
+			if(getd(.var_map$[0]) == .count_card_collection){
+				announce "[Card Collection]: Woow wow wow! "+strcharinfo(0)+" has comleted the "+ .MAP_LIST$[.@select] +" Collection.",0;
+			}
+			
+			sleep2 500;
+			cutin "map_"+ .@select +"_"+ getd(.var_map$[0]),1;				
+			close2;     
+		 if(getequipid(EQI_SHADOW_SHIELD) != -1)
+           	 unequip(EQI_SHADOW_SHIELD);
+           	 equip(33907);
+		end; 
+	end;
+	
+	WITHDRAW: //UNKNOWN
+		next;
+		soundeffect "click.wav",1;
+		mes .NPC$;
+		mes "What card collection do you want to withdraw?";
+		for( .@i = 0; .@i < getarraysize(.MAP_LIST$); .@i++ ) 
+		{
+			.var_map$[0] = "map_"+ .@i;
+			.@menu$ = .@menu$ + ( (getd(.var_map$[0])) ? "> ^0088ee"+.MAP_LIST$[.@i]+" Collection ["+ getd(.var_map$[0]) +"].^000000" : "- ^FF0000"+.MAP_LIST$[.@i]+" Collection ["+ getd(.var_map$[0]) +"]^000000" ) +":";
+		}
+		.@select = select( .@menu$ ) - 1;
+		
+		
+		next;
+		explode(.@card_selected$, .card_collections$[.@select], "|");			
+		soundeffect "click.wav",1;		
+		.var_map$[0] = "map_"+.@select+"";			
+		cutin "map_"+.@select+"_"+getd(.var_map$[0]), 1;
+		
+		if(!getd(.var_map$[0])){
+			mes .NPC$;
+			mes "^FF0000You dont have collected cards on this collection^000000.";
+			close2;
+				    
+			end;
+		}
+		
+		mes .NPC$;
+		mes "^008800"+.MAP_LIST$[.@select]+" Card Collection^000000 ";
+		mes "Here is your all card collection..";
+		for(.@a = 0; .@a < getarraysize(.@card_selected$); .@a ++){
+			.var_cards$[0] = "collection_"+ atoi(.@card_selected$[.@a]); 
+			if(getd(.var_cards$[0])){
+				mes "["+(.@a+1)+"]: "+((getd(.var_cards$[0]) != 0) ? "^008800"+getitemname(atoi(.@card_selected$[.@a]))+"^000000": "^FF0000 ^000000");	
+			} 
+		}
+		
+		for(.@a = 0; .@a < getarraysize(.@card_selected$); .@a += 1)
+		{
+			.var_cards$[0] = "collection_"+ atoi(.@card_selected$[.@a]);
+			.count_cards = countitem(atoi(.@card_selected$[.@a]));
+			if(getd(.var_cards$[0])){
+				.@menus$ = .@menus$ + ( (getd(.var_cards$[0]) != 0) ? "- ^008000"+ getitemname(atoi(.@card_selected$[.@a])) +" ^000000 [Withdraw]" : "-> ^FF0000"+  getitemname(atoi(.@card_selected$[.@a])) +" ^000000" ) +":";
+			}else{
+				.@menus$ = .@menus$ + ( "- ^FF0000"+ getitemname(atoi(.@card_selected$[.@a])) +" ^000000")+":";
+			}
+		}		
+		.@selected = select( .@menus$ ) - 1;
+		
+		next;
+			soundeffect "click.wav",1;		
+			.item_id = atoi(.@card_selected$[.@selected]);			
+			.var_cards$[0] = "collection_"+.item_id;
+			//cutin "card_illust(.item_id)", 1;		
+			
+			mes .NPC$;
+			mes "^008800"+.MAP_LIST$[.@select]+" Card Collection^000000 ";			
+			mes "^FF8000You select "+ getitemname(.item_id) +"^000000.";	
+		
+			if(!getd(.var_cards$[0])){
+				mes " ";
+				mes "^FF0000You dont have this on your collection^000000.";
+				close2;
+					    
+				end;
+			}
+			mes " ";
+			mes "Are you sure you want to withdraw this card?";
+			menu "Yes Continue...",YESACCEPT,"No! Cancel Transaction.",NOTHX;
+		
+		
+		YESACCEPT: 
+			close2;     
+			mes .NPC$;
+			
+			getinventorylist;
+			if (@inventorylist_count >= 100) {
+				mes "^FF0000You have 100 different items in ur inventory.";
+				mes "remove your items to continue this process.";
+				end;
+			}
+			
+			if(.zeny_withdraw_cost){
+				if(.zeny_withdraw_cost > Zeny){ 
+					mes "^FF0000You dont have enough zeny to withdraw this card^000000.";
+					mes "Requirede Zeny: "+F_InsertComma(.zeny_withdraw_cost)+"z";
+					close2;     
+					end;
+				}
+			}
+			
+			if (getgmlevel() < .maintenance){
+				mes "[Game Master]";
+				mes "^FF0000Sorry this is under maintenance.",
+					"come back again later "+strcharinfo(0)+".";
+				close2;     
+				end;
+			}
+				
+			soundeffect "click.wav",1;		
+			mes "Withdrawing cards....";
+			sleep2 1000;
+			specialeffect2 9;
+			sleep2 1000;
+			specialeffect2 9;
+			sleep2 1000;
+			specialeffect2 9;		
+			
+			mes "^0000FFYour "+getitemname(.item_id)+" is successfully withdrawn^000000.";
+			
+			// GET ITEM CARDS
+			getitem .item_id, .fsu_card_withdraw;
+			if(.zeny_withdraw_cost){ 
+				Zeny -= .zeny_withdraw_cost; 
+			}
+			
+			// SET DATA CHARACTER BOUND
+			.var_map$[0] = "map_"+.@select+"";	
+			.var_cards$[0] = "collection_"+.item_id;		
+			// GET DATA
+			setd .var_map$[0], getd(.var_map$[0]) - 1;				
+			setd .var_cards$[0], getd(.var_cards$[0]) - 1;
+			
+		sleep2 500;
+		cutin "map_"+ .@select +"_"+ getd(.var_map$[0]),1;				
+		close2;     
+	end;
+	
+	INFORMATION:
+		next;
+		soundeffect "click.wav",1;
+		mes .NPC$;
+		mes "The system encourages players to collect cards within the card collection set.",
+			"Having more of collected cards within the set there will be unlock the abilities of each deposit cards.", 
+			"By collecting cards and meeting the collection's requirements,", 
+			"the gains apply to characters stats and abilities within the account.",
+			" ";
+			
+		mes "- Every Card you deposit will give you bonus effect on your stats.",
+		    "- "+.fsu_card_deposit+"x Card is required to unlock the Deposit Reward.",
+			"- Card Withdrawal will give back the card you deposit but you will receive 1x card only.",
+			" ";
+		if(.zeny_deposit_cost){
+		mes "Requirede Zeny: "+F_InsertComma(.zeny_deposit_cost)+"z";
+		}
+				
+		close2;
+			    
+	end;
+	
+	NOTHX: 
+		next;
+		soundeffect "click.wav",1;
+		mes .NPC$;			
+		mes "Ok! bye! bye!";
+		close2;
+		    
+	end;
+end;
+ 
+OnInit:
+	.NPC$ = "[^0000FFCard Collection^000000]";
+	
+	// this NPC works for Game Paster Only	
+	.maintenance = 0; //Set 99 for Admin | 0 For All
+	
+	// Debug Mode
+	.debug_mode = 1; //Set 1 to enable Debug Mode | 0 For Production
+	
+	// Deposit Reward Activator
+	setarray .permit_item_id,"33907","1"; //Set Your Own Item ID
+	
+	// Gepard Aura Effect
+	setarray .gepard_aura,"0","0","0"; //Default Aura [NEXT UPDATE]
+	
+	// how many card requried to deposit
+	.fsu_card_deposit = 1;	//the card deposite requirements
+	.fsu_card_withdraw = 1; 	//the card will get 1x By Default
+
+	// zeny required for this process.
+	.zeny_deposit_cost = 0; 		//Set 0 to Disabled. By Default 0 | To Enable Just Put your Zeny Requirements Exp: 250000
+	.zeny_withdraw_cost = 250000; 	//Set 0 to Disabled. By Default 250000 Zeny
+	
+	.shop_npc_name$ = "card_collect_shop";
+	
+	// TOWN & DUNGEONS
+	setarray .MAP_LIST$[0],
+	"Prontera",		 //[0] Thiefbug Egg Card | Thiefbug Card | Female Thiefbug Card | Male Thiefbug Card 
+	"Morocc", 		 //[1] Matyr Card | Requiem Card | Zerom Card | Marduk Card 
+	"Geffen",		 //[2] Hunter Fly Card | Poison Spore Card | Nightmare Card | Ghoul Card
+	"Payon",		 //[3] Zombie card | Skeleton Card | Archer Skeleton Card | Soldier Skeleton Card
+	"Alberta",		 //[4] Dragon Tail Card | Spring Rabbit Card | Permeter Card | Solider Card
+	"Izlude",		 //[5] Vadon Card | Hydra Card | Kukre Card | Marina Card
+	"Aldebaran",	 //[6] Bathory Card | Rideword Card | Punk Card | Tower Keeper Card
+	"Lutie",		 //[7] Marin Card | Sasquatch Card | Christmas Cookie Card | Myst Case Card 
+	"Comodo",		 //[8] Medusa Card | Nereid Card | Pest Card | Megalith Card 
+	"Yuno";			 //[9] Horn Card | Rafflesia Card | Beetle King Card | Dustiness Card
+	
+	//CARD COLLECTION	
+	setarray .card_collections$[0],
+	"4012|4016|4026|4050|4001|4006|4021|4028|4022|4051", //[0] Prontera Collection [4030|4114|4019|4129]
+	"4097|4064|4112|4126|4009|4043|4036|4106|4116|4087", //[1] Morocc Collection [4076|4053|4031|4082]
+	"4115|4048|4127|4109|4002|4014|4060|4066|4071|4085", //[2] Geffen Collection [4040|4190|4187|4133|4136|4122|4091]
+	"4038|4025|4094|4086|4020|4010|4074|4103|4090|4212", //[3] Payon Collection [4029|4052|4283|4100|4098|4159|4070]
+	"4034|4227|4311|4220|4210|4102|4073|4178|4315|4319", //[4] Alberta Collection
+	"4049|4035|4027|4055|4093|4105|4058|4077|4089|4199", //[5] Izlude Collection
+	"4119|4185|4313|4229|4080|4069|4322|4256|4118|4296", //[6] Aldebaran Collection [4185]
+	"4196|4235|4206|4293|4323", //[7] Lutie Collection
+	"4124|4200|4223|4067|4078|4149|4234|4292|4157|4156", //[8] Comodo Collection
+	"4045|4083|4307|4056|4257"; //[9] Yuno Collection
+	
+	//DEPOSIT EFFECT ############################################################################################
+	setarray .unlock_effect$[0],
+	"MaxHP +24|"+				//[0] Prontera Collection
+	"Hit +10|"+					//[0] Prontera Collection
+	"Hit +5|"+					//[0] Prontera Collection
+	"MaxHP +10|"+				//[0] Prontera Collection
+	"Flee +2|"+					//[0] Prontera Collection
+	"Atk +3|"+					//[0] Prontera Collection
+	"Atk +4|"+					//[0] Prontera Collection
+	"MaxHP +18|"+				//[0] Prontera Collection
+	"MaxHP +20|"+				//[0] Prontera Collection
+	"Atk +6",					//[0] Prontera Collection
+	
+	"MaxHP +48|"+				//[1] Morocc Collection
+	"MaxHP +28|"+				//[1] Morocc Collection
+	"MaxHP +10|"+				//[1] Morocc Collection
+	"Large.Size Dmg 5%|"+		//[1] Morocc Collection
+	"MaxHP +10|"+				//[1] Morocc Collection
+	"Atk +4|"+					//[1] Morocc Collection
+	"MaxHP +28|"+				//[1] Morocc Collection
+	"Hit +5|"+					//[1] Morocc Collection
+	"MaxSP +20|"+				//[1] Morocc Collection
+	"MaxHP +18",				//[1] Morocc Collection
+	
+	"Lifesteal 1% HP|"+ 		//[2] Geffen Collection
+	"Atk +3|"+ 					//[2] Geffen Collection
+	"MaxHP +18|"+ 				//[2] Geffen Collection
+	"MaxHP +84|"+ 				//[2] Geffen Collection
+	"MaxHP +36|"+ 				//[2] Geffen Collection
+	"Regin SP +1|"+ 			//[2] Geffen Collection
+	"Brute Dmg 2%|"+ 			//[2] Geffen Collection
+	"Brute Def 2%|"+ 			//[2] Geffen Collection
+	"Undead Dmg 2%|"+ 			//[2] Geffen Collection
+	"Holy Dmg 5%",				//[2] Geffen Collection
+	
+	"MaxHP +24|"+				//[3] Payon Collection
+	"Def +1|"+					//[3] Payon Collection
+	"Long.Range Dmg 5%|"+		//[3] Payon Collection
+	"Crt.Dmg 1%|"+				//[3] Payon Collection
+	"Atk +3|"+					//[3] Payon Collection
+	"MaxHP +10|"+				//[3] Payon Collection
+	"Insec Dmg 8%|"+			//[3] Payon Collection
+	"MaxHP +10|"+				//[3] Payon Collection
+	"MAtk +6|"+					//[3] Payon Collection
+	"Mdef +2",					//[3] Payon Collection
+	
+	"Hit +5|"+					//[4] Alberta Collection
+	"MaxHP +25|"+				//[4] Alberta Collection
+	"Dark Dmg Taken +5%|"+		//[4] Alberta Collection
+	"MAtk +2|"+ 				//[4] Alberta Collection
+	"Atk +6|"+ 					//[4] Alberta Collection
+	"Ghost Dmg Taken -25%|"+	//[4] Alberta Collection
+	"Matk +10|"+				//[4] Alberta Collection
+	"Flee +5|"+					//[4] Alberta Collection
+	"MaxHP +25|"+				//[4] Alberta Collection
+	"MaxHP +50",				//[4] Alberta Collection
+	
+	"Fire Dmg +2%|"+			//[5] Izlude Collection
+	"DemiHuman Dmg +2%|"+		//[5] Izlude Collection
+	"MaxHP 28|"+				//[5] Izlude Collection
+	"MDef +1|"+					//[5] Izlude Collection
+	"MaxHP +72|"+				//[5] Izlude Collection
+	"Water Dmg Taken -8%|"+ 	//[5] Izlude Collection
+	"DemiHuman Dmg Taken -1%|"+	//[5] Izlude Collection
+	"MaxHP +70|"+				//[5] Izlude Collection
+	"Def +1|"+					//[5] Izlude Collection
+	"HP Recovery 5%",		    //[5] Izlude Collection
+	
+	"MaxHP +28|"+				//[6] Aldebaran Collection
+	"MAtk +2|"+					//[6] Aldebaran Collection
+	"MaxSP +20|"+				//[6] Aldebaran Collection
+	"Atk +12|"+					//[6] Aldebaran Collection
+	"Fish Dmg 2%|"+				//[6] Aldebaran Collection
+	"Water Dmg 5%|"+			//[6] Aldebaran Collection
+	"Brute Dmg 2%|"+			//[6] Aldebaran Collection
+	"SP Regen +2|"+				//[6] Aldebaran Collection
+	"Dragon Dmg 2%|"+			//[6] Aldebaran Collection
+	"MaxHP +18",				//[6] Aldebaran Collection
+	
+	"MDef +1|"+					//[7] Lutie Collection
+	"Def +1|"+					//[7] Lutie Collection
+	"MaxHP +40|"+				//[7] Lutie Collection
+	"Def +1|"+					//[7] Lutie Collection
+	"Water Resist 5%",			//[7] Lutie Collection
+	
+	"SubRace Demon +2%|"+		//[8] Comodo Collection
+	"Mdef +1|"+					//[8] Comodo Collection
+	"ResEff Stun 5%|"+			//[8] Comodo Collection
+	"ResEff Freeze 5%|"+		//[8] Comodo Collection
+	"Vit +1|"+ 					//[8] Comodo Collection
+	"MaxHP +18|"+				//[8] Comodo Collection
+	"MaxHP +18|"+				//[8] Comodo Collection
+	"Hit +10|"+					//[8] Comodo Collection
+	"Crit.Dmg to Undead 5%|"+	//[8] Comodo Collection
+	"Crit.Dmg to Formless 5%",	//[8] Comodo Collection
+	
+	"Longrange Def 5%|"+ 		//[9] Yuno Collection
+	"SubRace Fish 5%|"+ 		//[9] Yuno Collection
+	"SubRace Fish 5%|"+ 		//[9] Yuno Collection
+	"MaxHP +28|"+ 				//[9] Yuno Collection
+	"MAtk +6"; 					//[9] Yuno Collection
+		
+	OnTitleMSG:
+		showscript "Card Collection";
+		sleep 5000;
+	goto OnTitleMSG;	
+	
+end;
+} 
+ 

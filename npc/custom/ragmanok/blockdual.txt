@@ -1,0 +1,22 @@
+-	script	dualclientkicker	-1,{
+	end;
+OnPCLoadMapEvent:
+	//debugmes "map loaded";
+	query_sql "SELECT `char`.`name` FROM `char` LEFT JOIN login ON `char`.account_id = login.account_id WHERE last_ip = ( SELECT last_ip FROM login WHERE account_id = " + playerattached() + " ) AND online AND `char`.account_id != " + playerattached() , .@name$;
+	for ( .@i = 0; .@i < getarraysize ( .@name$ ); .@i = .@i++ ) {
+		getmapxy .@map$, .@x, .@y, 0, .@name$[.@i];
+		if ( .@map$ == .current_maps$ ) {
+			dispbottom "Dual accounts not allowed in this map.";
+			warp "SavePoint" , 0 , 0;
+			end;
+		}
+	}
+	end;
+	
+OnInit:
+	setarray .current_maps$[0] , "dbz_tour" , "cell_game", "coliseum";
+	.size_maps = getarraysize ( .current_maps$ );
+	for ( .i = 0; .i < .size_maps; .i++)
+		setmapflag .current_maps$[.i],	mf_loadevent ;
+	end;
+}

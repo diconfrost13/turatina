@@ -1,0 +1,262 @@
+/*
+DROP TABLE IF EXISTS `pvp_ranking`;
+
+CREATE TABLE IF NOT EXISTS `pvp_ranking` (
+`Char_ID` int(11) unsigned NOT NULL DEFAULT '0',
+`PlayerName` varchar(255) NULL DEFAULT '',
+`Kills` varchar(255) NULL DEFAULT '',
+`Deaths` varchar(255) NULL DEFAULT '',
+PRIMARY KEY (`Char_ID`)
+) ENGINE=MyISAM;
+
+DROP TABLE IF EXISTS `woe_ranking`;
+
+CREATE TABLE IF NOT EXISTS `woe_ranking` (
+`Char_ID` int(11) unsigned NOT NULL DEFAULT '0',
+`PlayerName` varchar(255) NULL DEFAULT '',
+`Kills` varchar(255) NULL DEFAULT '',
+`Deaths` varchar(255) NULL DEFAULT '',
+`EmpBreak` varchar(255) NULL DEFAULT '',
+PRIMARY KEY (`Char_ID`)
+) ENGINE=MyISAM;
+*/
+
+prontera,164,173,4	script	Krane The Ranker	417,{
+
+	set .@menu$, "PvP Rank:GvG Rank:Guild Rank:";
+	if (getgmlevel() == 99) { set .@menu$, .@menu$ + "Reset Data"; }
+	switch(select(.@menu$)) {
+	case 1:
+	mes "[Master Krane]";
+	mes "Hi, "+strcharinfo(0)+"";
+	mes "If you want to I can show you";
+	mes "PVP Top "+.top+" Strongest and the Weakest.";
+	next;
+	menu "Top "+.top+" Kills",PvPKills,"Top "+.top+" Weakest",PvPDeaths,"Nope",PvPNope;
+
+	PvPKills:
+	query_sql "CREATE TABLE IF NOT EXISTS `pvp_ranking` ( `Char_ID` int(11) unsigned NOT NULL DEFAULT '0', `PlayerName` varchar(255) NULL DEFAULT '', `Kills` varchar(255) NULL DEFAULT '', `Deaths` varchar(255) NULL DEFAULT '', PRIMARY KEY (`Char_ID`) ) ENGINE=MyISAM";
+	query_sql( "DELETE FROM `pvp_ranking` WHERE `PlayerName` NOT IN ( SELECT `name` FROM `char` )" ); 
+	set .@size, query_sql( "SELECT * FROM pvp_ranking WHERE Kills > 0 ORDER BY Kills DESC limit "+ .top, .@CharID, .@name$, .@Kills, .@Deaths);
+	
+	mes "[^FF0000PvP ^0000FFRank ^996600Top ^FF0000" + .top +"^000000]";
+	for (set .@c, 0; .@c < .@size; set .@c, .@c + 1)
+		mes "Top ^FF0000" +(.@c + 1) +"^000000: ^0000FF" + .@name$[.@c] +"^000000 | ^FF0000" + .@Kills[.@c] +"^000000 Kills | ^FF0000" + .@Deaths[.@c] +"^000000 Deaths";
+	close;
+	
+	PvPDeaths:
+	query_sql "CREATE TABLE IF NOT EXISTS `pvp_ranking` ( `Char_ID` int(11) unsigned NOT NULL DEFAULT '0', `PlayerName` varchar(255) NULL DEFAULT '', `Kills` varchar(255) NULL DEFAULT '', `Deaths` varchar(255) NULL DEFAULT '', PRIMARY KEY (`Char_ID`) ) ENGINE=MyISAM";
+	query_sql( "DELETE FROM `woe_ranking` WHERE `PlayerName` NOT IN ( SELECT `name` FROM `char` )" ); 
+	set .@size, query_sql( "SELECT * FROM pvp_ranking WHERE Deaths > 0 ORDER BY Deaths DESC limit "+ .top, .@CharID, .@name$, .@Kills, .@Deaths);
+	
+	mes "[^FF0000WoE ^0000FFRank ^996600Top ^FF0000" + .top +"^000000]";
+	for (set .@c, 0; .@c < .@size; set .@c, .@c + 1)
+		mes "Top ^FF0000" +(.@c + 1) +"^000000: ^0000FF" + .@name$[.@c] +"^000000 | ^FF0000" + .@Kills[.@c] +"^000000 Kills | ^FF0000" + .@Deaths[.@c] +"^000000 Deaths ";
+	close;
+	
+	PvPNope:
+	mes "[Master Krane]";
+	mes "Well Okay";
+	close;
+	
+	case 2:
+	mes "[Master Krane]";
+	mes "Hi, "+strcharinfo(0)+"";
+	mes "If you want to I can show you";
+	mes "GVG Top "+.top+" Strongest/Weakest and the Emperium Breaker.";
+	next;
+	menu "Top "+.top+" Kills",GvGKills,"Top "+.top+" Weakest",GvGDeaths,"Top "+.top+" Breaker",EmpBreak,"Nope",GvGNope;
+	
+	GvGKills:
+	query_sql "CREATE TABLE IF NOT EXISTS `woe_ranking` ( `Char_ID` int(11) unsigned NOT NULL DEFAULT '0', `PlayerName` varchar(255) NULL DEFAULT '', `Kills` varchar(255) NULL DEFAULT '', `Deaths` varchar(255) NULL DEFAULT '', `EmpBreak` varchar(255) NULL DEFAULT '', PRIMARY KEY (`Char_ID`) ) ENGINE=MyISAM";
+	query_sql( "DELETE FROM `woe_ranking` WHERE `PlayerName` NOT IN ( SELECT `name` FROM `char` )" ); 
+	set .@size, query_sql( "SELECT * FROM woe_ranking WHERE Kills > 0 ORDER BY Kills DESC limit "+ .top, .@CharID, .@name$, .@Kills, .@Deaths, .@EmpBreak);
+	
+	mes "[^FF0000WoE ^0000FFRank ^996600Top ^FF0000" + .top +"^000000]";
+	for (set .@c, 0; .@c < .@size; set .@c, .@c + 1)
+		mes "Top ^FF0000" +(.@c + 1) +"^000000: ^0000FF" + .@name$[.@c] +"^000000 | ^FF0000" + .@Kills[.@c] +"^000000 Kills | ^FF0000" + .@Deaths[.@c] +"^000000 Deaths | ^FF0000" + .@EmpBreak[.@c] +"^000000 Emp Break ";
+	close;
+	
+	GvGDeaths:
+	query_sql "CREATE TABLE IF NOT EXISTS `woe_ranking` ( `Char_ID` int(11) unsigned NOT NULL DEFAULT '0', `PlayerName` varchar(255) NULL DEFAULT '', `Kills` varchar(255) NULL DEFAULT '', `Deaths` varchar(255) NULL DEFAULT '', `EmpBreak` varchar(255) NULL DEFAULT '', PRIMARY KEY (`Char_ID`) ) ENGINE=MyISAM";
+	query_sql( "DELETE FROM `woe_ranking` WHERE `PlayerName` NOT IN ( SELECT `name` FROM `char` )" ); 
+	set .@size, query_sql( "SELECT * FROM woe_ranking WHERE Deaths > 0 ORDER BY Deaths DESC limit "+ .top, .@CharID, .@name$, .@Kills, .@Deaths, .@EmpBreak);
+	
+	mes "[^FF0000WoE ^0000FFRank ^996600Top ^FF0000" + .top +"^000000]";
+	for (set .@c, 0; .@c < .@size; set .@c, .@c + 1)
+		mes "Top ^FF0000" +(.@c + 1) +"^000000: ^0000FF" + .@name$[.@c] +"^000000 | ^FF0000" + .@Kills[.@c] +"^000000 Kills | ^FF0000" + .@Deaths[.@c] +"^000000 Deaths | ^FF0000" + .@EmpBreak[.@c] +"^000000 Emp Break";
+	close;
+	
+	EmpBreak:
+	query_sql "CREATE TABLE IF NOT EXISTS `woe_ranking` ( `Char_ID` int(11) unsigned NOT NULL DEFAULT '0', `PlayerName` varchar(255) NULL DEFAULT '', `Kills` varchar(255) NULL DEFAULT '', `Deaths` varchar(255) NULL DEFAULT '', `EmpBreak` varchar(255) NULL DEFAULT '', PRIMARY KEY (`Char_ID`) ) ENGINE=MyISAM";
+	query_sql( "DELETE FROM `woe_ranking` WHERE `PlayerName` NOT IN ( SELECT `name` FROM `char` )" ); 
+	set .@size, query_sql( "SELECT * FROM woe_ranking WHERE EmpBreak > 0 ORDER BY EmpBreak DESC limit "+ .top, .@CharID, .@name$, .@Kills, .@Deaths, .@EmpBreak);
+	query_sql "SELECT `name`, `guild_id` FROM `char` WHERE `name` = '"+.@name$+"'", .@CName$, .@Gid;
+	
+	mes "[^FF0000WoE ^0000FFRank ^996600Top ^FF0000" + .top +"^000000]";
+	for (set .@c, 0; .@c < .@size; set .@c, .@c + 1)
+		mes "Top ^FF0000" +(.@c + 1) +"^000000: ^0000FF" + .@name$[.@c] +"^000000 | ^FF0000" + .@Kills[.@c] +"^000000 Kills | ^FF0000" + .@Deaths[.@c] +"^000000 Deaths | ^FF0000" + .@EmpBreak[.@c] +"^000000 Emp Break";
+	close;
+	
+	GvGNope:
+	mes "[Master Krane]";
+	mes "Well Okay";
+	close;
+	
+	case 3:
+	for (set .@x,0; .@x < .top; set .@x,.@x + 1) {
+		if (.@x) mes "- - - - - - - - - - - - - - -";
+		mes "# ^ff0000" + (.@x + 1) + "^000000: ^0000ff" + ( (.GuildName$[.@x])? .GuildName$[.@x]:"None" ) + "^000000";
+		mes " - Guild Master: ^0000ff" + ( (.GuildMaster$[.@x])? .GuildMaster$[.@x]:"None" ) + "^000000";
+		mes " - Territories: ^ff0000" + .NumCastles[.@x] + "^000000";
+		mes " - Members: ^ff0000" + .NumMembers[.@x] + "^000000";
+	}
+	end;
+	
+	case 4:
+	mes "[Master Krane]";
+	mes "Hi, "+strcharinfo(0)+"";
+	mes "Want to go shopping?";
+	next;
+	menu "PvP Shop",PvPShop,"GvG Shop",GvGShop,"Emp Break Shop",BreakShop,"Nope",ShopNope;
+	
+	PvPShop:
+	callshop "PvP_Points_Shop",1;
+	end;
+	
+	GvGShop:
+	callshop "GvG_Points_Shop",1;
+	end;
+	
+	BreakShop:
+	callshop "EmpBreak_Points_Shop",1;
+	end;
+	
+	ShopNope:
+	mes "[Master Krane]";
+	mes "Well Okay";
+	close;
+	
+	case 5:
+	mes "[Master Krane]";
+	mes "Good Day!";
+	next;
+	menu "PvP Ranking Reset",PvPReset,"GvG Ranking Reset",GvGReset,"Nope",No;
+	
+	PvPReset:
+	mes "[Master Krane]";
+	mes "PvP Ranking Reset?";
+	menu "Are you sure?",PvPYes,"Nope",PvPNo;
+	
+	PvPYes:
+	query_sql("TRUNCATE TABLE `ragnarok`.`pvp_ranking`;");
+	mes "PvP Rank Reset Success";
+	close;
+	
+	PvPNo:
+	mes "[Master Krane]";
+	mes "Well Okay";
+	close;
+	
+	GvGReset:
+	mes "[Master Krane]";
+	mes "GvG Ranking Reset?";
+	menu "Are you sure?",GvGYes,"Nope",GvGNo;
+	
+	GvGYes:
+	query_sql("TRUNCATE TABLE `ragnarok`.`woe_ranking`;");
+	mes "GvG Rank Reset Success";
+	close;
+	
+	GvGNo:
+	mes "[Master Krane]";
+	mes "Well Okay";
+	close;
+	
+	No:
+	mes "[Master Krane]";
+	mes "Well Okay";
+	close;
+
+	}
+
+OnInit: // Script Configuration
+	set .Cnt, query_sql("SELECT (SELECT count(c.castle_id) FROM guild_castle c WHERE c.guild_id = g.guild_id) castles, CONCAT(g.name, ' (LV. ',g.guild_lv,')') guild, count(g.char_id) members, g.master FROM guild g LEFT JOIN guild_member m ON g.guild_id = m.guild_id GROUP BY g.guild_id HAVING castles > 0 ORDER BY castles DESC, guild_lv DESC, members DESC", .NumCastles,.GuildName$,.NumMembers,.GuildMaster$);
+	set .PvP_Point, 1;    //PvP Points to add when kill
+	set .PvP_Deductpoint, 1; //PvP Points to deduct when died
+	set .WoePoints, 1;      //WoE points to add in database/player when kill
+	set .WoeDeduct, 1;      //Woe points to add in database
+	set .diedeductpoint, 1; //Woe points to deduct when died
+	set .top, 5;
+	waitingroom "PvP/GvG Rank List",0;
+	end;
+
+OnPCKillEvent:
+	if (killerrid != getcharid(3)) {
+	if (( agitcheck() || agitcheck2() ) && compare(strcharinfo(3),"g_cas")) {
+		set points, points+.WoePoints;
+		query_sql( "SELECT * FROM woe_ranking WHERE `Char_ID` = '"+getcharid(0)+"'", .@CharID, .@Name$, .@Kills, .@Deaths, .@EmpBreak);
+		set ToTalP , .@Kills + .WoePoints;
+		
+	if(getcharid(0) == .@CharID){
+		query_sql("UPDATE `woe_ranking` SET `Kills` = '"+ToTalP+"' WHERE `Char_ID` = '"+getcharid(0)+"'");
+	}else{	
+		query_sql("INSERT INTO `woe_ranking` (`Char_ID`,`PlayerName`,`Kills`,`Deaths`,`EmpBreak`) VALUES ('"+getcharid(0)+"', '"+strcharinfo(0)+"', '"+.WoePoints+"', '"+.@Deaths+"', '"+.@EmpBreak+"')"); 
+	}
+	////////query for the deaths
+		query_sql( "SELECT `char_id`, `account_id` FROM `char` WHERE `account_id` =  '"+killedrid+"' ", .@Cchar_id, .@Aid);
+		query_sql( "SELECT * FROM woe_ranking WHERE `Char_ID` = '"+.@Cchar_id+"'", .@CharID, .@Name$, .@Kills, .@Deaths, .@EmpBreak);
+		set TotalD , .@Deaths + .WoeDeduct;
+	
+	if(.@CharID != .@Cchar_id){
+		query_sql("INSERT INTO `woe_ranking` (`Char_ID`,`PlayerName`,`Kills`,`Deaths`,`EmpBreak`) VALUES ('"+.@Cchar_id+"', '"+strcharinfo(0)+"', '0', '"+TotalD+"', '"+.@EmpBreak+"')");
+	}else{
+		query_sql("UPDATE woe_ranking SET Deaths = '"+TotalD+"' WHERE `Char_ID` = '"+.@Cchar_id+"'");
+	}	
+	
+	//This is the point system on the player, you can disable this anytime by adding comment " // "
+		dispbottom "You killed "+rid2name(killedrid)+" you gained "+.WoePoints+" point and You now have "+Points+" Woe Points.";
+		attachrid(killedrid);
+		set points, points-.diedeductpoint;
+		dispbottom "You are killed by "+rid2name(killerrid)+" you lost "+.diedeductpoint+" points and You now have "+Points+" Woe Points.";
+
+	end;
+	///////
+	}else if(strcharinfo(3) == "prt_pvp"){ // This is PVP MAP restriction
+	if(getcharid(3)==killedrid) end;
+		set PvPpoints, PvPpoints+.PvP_Point;
+		query_sql( "SELECT * FROM pvp_ranking WHERE `Char_ID` = '"+getcharid(0)+"'", .@CharID, .@Name$, .@Kills, .@Deaths);
+		set ToTalPvPoints , .@Kills + .PvP_Point;
+		
+	if(getcharid(0) == .@CharID){
+		query_sql("UPDATE `pvp_ranking` SET `Kills` = '"+ToTalPvPoints+"' WHERE `Char_ID` = '"+getcharid(0)+"'");
+	}else{	
+		query_sql("INSERT INTO `pvp_ranking` (`Char_ID`,`PlayerName`,`Kills`,`Deaths`) VALUES ('"+getcharid(0)+"', '"+strcharinfo(0)+"', '"+.PvP_Point+"', '"+.@Deaths+"')"); 
+	}
+		
+		//This is the point system on the player, you can disable this anytime by adding comment " // "
+		dispbottom "You killed "+rid2name(killedrid)+" you gained "+.PvP_Point+" point and You now have "+PvPpoints+" PVP Points.";
+		attachrid(killedrid);
+		set PvPpoints, PvPpoints-.PvP_Deductpoint;
+		dispbottom "You are killed by "+rid2name(killerrid)+" you lost "+.PvP_Deductpoint+" Points and You now have "+PvPpoints+" PVP Points.";
+		
+		////////query for the deaths
+		query_sql( "SELECT `char_id`, `account_id` FROM `char` WHERE `account_id` =  '"+getcharid(3)+"' ", .@Cchar_id, .@Aid);
+		query_sql( "SELECT * FROM pvp_ranking WHERE `Char_ID` = '"+.@Cchar_id+"'", .@CharID, .@Name$, .@Kills, .@Deaths);
+		set ToTalDeathPvPoints , .@Deaths + .PvP_Deductpoint;
+		
+	if(.@CharID != .@Cchar_id){
+		query_sql("INSERT INTO `pvp_ranking` (`Char_ID`,`PlayerName`,`Kills`,`Deaths`) VALUES ('"+.@Cchar_id+"', '"+strcharinfo(0)+"', '0', '"+ToTalDeathPvPoints+"')");
+	}else{
+		query_sql("UPDATE pvp_ranking SET Deaths = '"+ToTalDeathPvPoints+"' WHERE `Char_ID` = '"+.@Cchar_id+"'");
+	}
+		end;
+	}
+    }
+	end;
+}
+}
+
+-	pointshop	PvP_Points_Shop	-1,PvPpoints,607:5,608:5;
+-	pointshop	GvG_Points_Shop	-1,points,1202:5;
+-	pointshop	EmpBreak_Points_Shop	-1,ToTalB,2311:10

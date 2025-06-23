@@ -1,0 +1,15 @@
+prontera,151,186,0	script	Server Time#1::st	837,{
+	end;
+
+OnInit:
+	while(1) {
+		set .@h, gettime(3);
+		set .@m, gettime(2);
+		set .@s, gettime(1);
+		delwaitingroom;
+		waitingroom ""+ ( .@h > 12 ? .@h -12 : .@h ) +":"+ ( .@m >= 10 ? .@m : "0"+ .@m ) +":"+ ( .@s >= 10 ? .@s : "0"+ .@s ) +" "+ ( .@h > 12 ? "PM" : "AM" ),0;
+		sleep 998;
+	}
+}
+
+sec_in02,138,174,3	duplicate(st)	Server Time#2	114

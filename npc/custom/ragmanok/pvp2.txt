@@ -1,0 +1,78 @@
+//prontera,163,198,5	script	PVP Master#PvPMaster	752,{
+-	script	PvP Master#main::PvPMaster	-1,{
+	if ( BaseJob == Job_Novice ) {
+		mes "[ PvP Arena ]";
+		mes "It is too dangerous for you to be in this place.";
+		close;
+	}
+	mes "[ PvP Arena ]";
+	mes ""+ strcharinfo(0) +"... What can I do for you today?";
+	if (select("Going to PvP:Punching Area") == 2) {
+		warp "prontera",229,70;
+		end;
+	}
+
+	next;
+	switch ( select("^0000FFFree-for-all^000000 ["+ getmapusers("guild_vs5") +"/100]","^0000FFTeam vs Team^000000 ["+ getmapusers("guild_vs2") +"/100]") ) {
+	case 1:
+		.@map$ = "guild_vs5";
+		.@str$ = "Free For All Room";
+		break;
+	default: 
+	if ( getstatus(SC_SPIRIT) ) sc_end SC_SPIRIT;
+	warp "guild_vs2",0,0;
+	announce strcharinfo(0) +" has joined the Team vs Team Room!",bc_all;
+	end;
+	}
+	if ( getstatus(SC_SPIRIT) ) sc_end SC_SPIRIT;
+	warp .@map$,0,0;
+	announce strcharinfo(0) +" has joined the Free For All PvP Room!",bc_all;
+	end;
+
+OnInit:
+	initnpctimer;
+	end;
+
+OnTimer3000:
+    showscript "PvP Arena";
+	setnpctimer 0;
+    end;
+}
+
+//-	itemshop	PvPShop	-1,65042:no,14003:50,14002:10,13989:5,14005:5,60098:50,12029:10,12030:10,12031:10,12033:10
+
+// Duplicates
+prontera,147,175,5	duplicate(PvPMaster)	PvP Master#31	843
+clangroup,247,50,6	duplicate(PvPMaster)	PvP Master#1	843
+prontera,40,212,5	duplicate(PvPMaster)	PvP Master#22	843
+sec_in02,145,155,5	duplicate(PvPMaster)	PvP Master#23	843
+morocc,165,97,4	duplicate(PvPMaster)	PvP Master#2	843
+payon,165,113,5	duplicate(PvPMaster)	PvP Master#3	843
+amatsu,214,101,4	duplicate(PvPMaster)	PvP Master#4	843
+alberta,109,69,5	duplicate(PvPMaster)	PvP Master#5	843
+alberta,25,241,5	duplicate(PvPMaster)	PvP Master#24	843
+lighthalzen,167,105,3	duplicate(PvPMaster)	PvP Master#6	843
+ayothaya,195,177,5	duplicate(PvPMaster)	PvP Master#7	843
+comodo,182,156,5	duplicate(PvPMaster)	PvP Master#8	843
+geffen,125,68,4	duplicate(PvPMaster)	PvP Master#9	843
+gonryun,163,126,4	duplicate(PvPMaster)	PvP Master#10	843
+yuno,144,187,5	duplicate(PvPMaster)	PvP Master#11	843
+xmas,154,139,3	duplicate(PvPMaster)	PvP Master#12	843
+aldebaran,135,122,5	duplicate(PvPMaster)	PvP Master#13	843
+umbala,105,165,3	duplicate(PvPMaster)	PvP Master#14	843
+louyang,205,105,5	duplicate(PvPMaster)	PvP Master#15	843
+einbroch,58,208,5	duplicate(PvPMaster)	PvP Master#16	843
+hugel,104,154,3	duplicate(PvPMaster)	PvP Master#17	843
+//rachel,137,119,3	duplicate(PvPMaster)	PvP Master#18	843
+//mid_camp,193,253,3	duplicate(PvPMaster)	PvP Master#19	843
+//manuk,292,146,3	duplicate(PvPMaster)	PvP Master#20	843
+//splendide,208,156,3	duplicate(PvPMaster)	PvP Master#21	843
+
+//// @reloadnpcfile npc/premier/warps/pvp.txt
+
+guild_vs5	mapflag	pvp
+guild_vs5	mapflag	pvp_noguild
+guild_vs5	mapflag pvp_noparty
+guild_vs5	mapflag	nobranch
+guild_vs5	mapflag	nosave	SavePoint
+

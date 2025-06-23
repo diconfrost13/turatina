@@ -1,0 +1,223 @@
+prontera,156,201,5	script	Valkyrie's Blessing	111,{
+
+if( $Durations4 > gettimetick(2) ){
+	mes "[ ^0000FF"+.npc_name$+"^000000 ]";
+	mes "Currently - ^0000FFACTIVE^000000!";
+	mes " ---------------------------------- ";
+			if( gettimetick(2) < $Durations4 ) {
+			.@sec = $Durations4 - gettimetick(2);
+			.@day = .@sec / 86400;
+			.@sec = .@sec - (.@day * 60 * 60 * 24);
+			.@hr  = .@sec / 3600;
+			.@sec = .@sec - (.@hr * 60 * 60);
+			.@min = .@sec / 60;
+			.@sec = .@sec - (.@min * 60);
+			
+			.@day$ = F_InsertPlural(.@day, "day", 0, "^3366FF%d ^777777%s^000000");
+			.@hr$  = F_InsertPlural(.@hr, "hour", 0, "^3366FF%d ^777777%s^000000");
+			.@min$ = F_InsertPlural(.@min, "minute", 0, "^3366FF%d ^777777%s^000000");
+			.@sec$ = F_InsertPlural(.@sec, "second...", 0, "^3366FF%d ^777777%s^000000");		
+		mes "Valkyrie's Blessing will expire in..";	
+		mes (.@day > 0 ? .@day$+" ":"")+""+(.@hr > 0 ? .@hr$+" ":"")+""+(.@min > 0 ? .@min$+" ":"")+""+(.@sec > 0 ? .@sec$+" ":"");
+		}
+	next;
+	mes "[ ^0000FF"+.npc_name$+"^000000 ]";
+	mes "Current rankings:";
+	if (!(.@num = query_sql("SELECT `char_id`, `amount` FROM `exp_contrib_rank` WHERE `amount` > 0 ORDER BY `amount` DESC LIMIT "+.top_reward, .@char_id, .@amount)) ) {
+		mes "No data found.";
+		close;
+	}
+	for ( .@i = 0; .@i < .@num; .@i++ ) {
+		query_sql("SELECT `name` FROM `char` WHERE char_id = "+.@char_id[.@i]+";", .@name$);
+		mes "Top "+ (.@i+1) +" - "+ .@name$ +" - "+ F_InsertComma(.@amount[.@i]) +"z";
+	}
+	close;
+}
+mes "[ ^0000FF"+.npc_name$+"^000000 ]";
+mes "Are you interested in contributing to boost drop rates and experience gains??";
+next;
+mes "[ ^0000FF"+.npc_name$+"^000000 ]";
+mes "I require [^FF0000 Zeny^000000 ] to activate Valkyrie's Blessing.";
+next;
+mes "[ ^0000FF"+.npc_name$+"^000000 ]";
+mes "Current Zeny Contributed";
+mes "^003AFF"+F_InsertComma($TotalZeny)+"^000000 / 1,000,000,000 Zeny.";
+next;
+mes "[ ^0000FF"+.npc_name$+"^000000 ]";
+mes "Server needs ^FF0000"+.TargetZeny+"^000000  Zeny to Activate Valkyrie's Blessing.";
+mes "Would you like to contribute?";
+next;
+switch(select("Contribute Zeny:View Rankings:Cancel")) {
+	case 1:
+		mes "[ ^0000FF"+.npc_name$+"^000000 ]";
+		mes "How much would you like to Contribute?";
+		mes "Minimum contribution is ^FF0000 2,000,000^000000 Zeny.";
+		input .@Amount,0,Zeny;
+		if( .@Amount < .MinZeny ){
+			next;
+			mes "[ ^0000FF"+.npc_name$+"^000000 ]";
+			mes "Sorry, but you don't input enough Zeny.";
+			close;
+			}
+			next;
+			mes "[ ^0000FF"+.npc_name$+"^000000 ]";
+			mes "You have contributed ^FF0000"+F_InsertComma(.@Amount)+"^000000 Zeny.";
+			mes "Thank you for participating.";
+			announce "[ System ]: Thank you "+strcharinfo(0)+" for contributing "+F_InsertComma(.@Amount)+" Zeny to Valkyrie's Blessings!", 0;
+				specialeffect2 EF_INCAGILITY;
+				sc_start SC_INCREASEAGI,1800000,10;
+				specialeffect2 EF_BLESSING;
+				sc_start SC_BLESSING,1800000,10;
+				sc_start SC_ANGELUS,1800000,30;
+				specialeffect2 EF_HEAL2;
+				percentheal 100,100;
+		#ValkyrieBlessing += 1;
+		set Zeny,Zeny - .@Amount;
+		set $TotalZeny,$TotalZeny + .@Amount;
+		query_sql("INSERT INTO `exp_contrib_rank` (`account_id`,`char_id`,`amount`) VALUES ('"+getcharid(3)+"','"+getcharid(0)+"','"+.@Amount+"') ON DUPLICATE KEY UPDATE `amount` = `amount`+'"+.@Amount+"'");
+
+		if( $TotalZeny >= .TargetZeny ) {
+			$exp_contrib_session_id++;
+			set $TotalZeny,0;
+			set $Durations4,gettimetick(2) + 10800;
+			
+			.@num = query_sql("SELECT `char_id`, `amount` FROM `exp_contrib_rank` WHERE `amount` > 0 ORDER BY `amount` DESC LIMIT "+.top_reward, .@char_id, .@amount);
+			globalmes "================== Top "+.top_reward+" Donators are as follows: ==================";
+			freeloop(1);
+			for ( .@i = 0; .@i < .@num; .@i++ ) {
+				query_sql("SELECT `name` FROM `char` WHERE char_id = "+.@char_id[.@i]+";", .@name$);
+				globalmes "Top "+ (.@i+1) +" - "+ .@name$ +" - "+ F_InsertComma(.@amount[.@i]) +"z";
+				explode(.@T$,.reward_data$[.@i],"|");
+				explode(.@TT$,.@T$[0],",");
+				for ( .@c = 0; .@c < getarraysize(.@TT$); .@c+=2 ) {
+					.@reward_item[getarraysize(.@reward_item)] = atoi(.@TT$[.@c]);
+					.@reward_amt[getarraysize(.@reward_amt)] = atoi(.@TT$[.@c+1]);
+				}
+				//.@reward_zeny = atoi(.@T$[1]);
+				//mail .@char_id[.@i],"no-reply","**Top Contributors Reward**","Hi Adventurer! \r\n \r\n Here is your reward ranking as #"+(.@i+1)+" on Valkyrie's Blessing NPC. \r\n \r\n ~ Admin", .@reward_zeny, .@reward_item, .@reward_amt;
+				//query_sql("INSERT INTO `exp_contrib_reward_log` (`char_id`, `rank`, `amount`, `session_id`) VALUES ('"+.@char_id[.@i]+"', '"+(.@i+1)+"', '"+.@amount[.@i]+"', '"+$exp_contrib_session_id+"')");
+			}
+			freeloop(0);
+			globalmes "============================================================";
+			//query_sql("TRUNCATE TABLE `exp_contrib_rank`");
+			set $@brate,6000;
+			set $@jrate,6000;
+			set $@drate,600;
+			//Base exp
+			setbattleflag("base_exp_rate",$@brate);
+			//Job exp
+			setbattleflag("job_exp_rate",$@jrate);
+			//Drops
+			setbattleflag("item_rate_common",$@drate);
+			setbattleflag("item_rate_heal",$@drate);
+			setbattleflag("item_rate_use",$@drate);
+			setbattleflag("item_rate_equip",$@drate,true); // Apply new rates to configs set above
+			atcommand "@reloadmobdb";
+			initnpctimer;
+			npctalk "Modified Rates Started";
+			announce "[ System ]: Valkyrie's Blessing Activated! Double Exp Rate | Double Drop Rate for 3 Hours. Enjoy! ",0;
+			end;
+			
+		}
+		close;
+	case 2:
+		mes "Select :";
+		next;
+		switch(select("Current Ranking:Previous Ranking:All-Time Ranking")) {
+		case 1:
+			mes "Current Rankings:";
+			mes "-----------------------------";
+			if (!(.@num = query_sql("SELECT `char_id`, `amount` FROM `exp_contrib_rank` WHERE `amount` > 0 ORDER BY `amount` DESC LIMIT "+.top_reward, .@char_id, .@amount)) ) {
+				mes "No data found.";
+				close;
+			}
+			for ( .@i = 0; .@i < .@num; .@i++ ) {
+				query_sql("SELECT `name` FROM `char` WHERE char_id = "+.@char_id[.@i]+";", .@name$);
+				mes "Top "+ (.@i+1) +" - "+ .@name$ +" - "+ F_InsertComma(.@amount[.@i]) +"z";
+			}
+			close;
+		case 2:
+			mes "Previous Ranking:";
+			mes "-----------------------------";
+			if (!(.@num = query_sql("SELECT `char_id`, `amount` FROM `exp_contrib_reward_log` WHERE `session_id` = '"+($exp_contrib_session_id-1)+"' ORDER BY `amount` DESC LIMIT "+.top_reward, .@char_id, .@amount)) ) {
+				mes "No data found.";
+				close;
+			}
+			for ( .@i = 0; .@i < .@num; .@i++ ) {
+				query_sql("SELECT `name` FROM `char` WHERE char_id = "+.@char_id[.@i]+";", .@name$);
+				mes "Top "+ (.@i+1) +" - "+ .@name$ +" - "+ F_InsertComma(.@amount[.@i]) +"z";
+			}
+			close;
+		case 3:
+			mes "All-Time Ranking:";
+			mes "-----------------------------";
+			if (!(.@num = query_sql("SELECT `char_id`, SUM(`amount`) AS total_amount FROM `exp_contrib_reward_log` GROUP BY `char_id` ORDER BY total_amount DESC LIMIT "+.top_reward, .@char_id, .@amount)) ) {
+				mes "No data found.";
+				close;
+			}
+			for ( .@i = 0; .@i < .@num; .@i++ ) {
+				query_sql("SELECT `name` FROM `char` WHERE char_id = "+.@char_id[.@i]+";", .@name$);
+				mes "Top "+ (.@i+1) +" - "+ .@name$ +" - "+ F_InsertComma(.@amount[.@i]) +"z";
+			}
+			close;
+		}
+		end;
+		
+	case 3:
+		mes "Next time!";
+		close;
+}
+//OnTimer60000:
+OnTimer10800000:
+	OnCommand:
+	atcommand "@reloadbattleconf";
+	atcommand "@reloadmobdb";	
+	set $Durations4, 0;
+	query_sql("TRUNCATE TABLE `exp_contrib_rank`");
+	announce "[ System ]: Valkyrie's Blessing has ended. Exp and Drop Rates are back to Normal. Thank you for Participating",0;
+	stopnpctimer;
+	npctalk "Valkyrie's Blessing just ended.";
+	end;
+
+
+OnInit:
+bindatcmd "contri", strnpcinfo(0) +"::OnCommand", 99,99;
+set .top_reward, 3; // Top 5 will be rewarded
+
+setarray .reward_data$, // "<id,amount>{,<id,amount>{,etc..}}|<zeny>"
+	"32607,1,13534,10,13810,5|500000", // Top 1 Reward
+	"32608,1,13534,7,13810,3|300000", // Top 2 Reward
+	"32609,1,13534,5,13810,1|100000"; // Top 3 Reward.. add more.. just note on the format.. the last of the list should end using ';' while the rest just end with ','
+
+set .npc_name$,"System";	// NPC name
+set .TargetZeny,1000000000;
+query_sql ("CREATE TABLE IF NOT EXISTS `exp_contrib_rank` ( `account_id` int(11) unsigned NOT NULL, `char_id` int(11) unsigned NOT NULL, `amount` int(11) default '0', PRIMARY KEY ( `account_id` ),KEY (`amount`)) ENGINE=InnoDB;");
+query_sql ("CREATE TABLE IF NOT EXISTS `exp_contrib_reward_log` (`id` BIGINT unsigned NOT NULL auto_increment, `char_id` int(11) unsigned NOT NULL, `rank` int(11) unsigned NOT NULL, `amount` bigint(30) unsigned NOT NULL, `status` int(11) NOT NULL default '1', `session_id` int(11) unsigned NOT NULL, `claim_time` TIMESTAMP DEFAULT NOW(), PRIMARY KEY ( `id` )) ENGINE=MyISAM AUTO_INCREMENT=1");
+
+set .MinZeny,2000000; // Minimum Zeny
+
+	while(1){ 
+	sleep 1000; 
+	showscript "             Valkyrie's Blessing     Total Zeny: "+F_InsertComma($TotalZeny)+"z / 1,000,000,000z"; 
+	}
+
+	
+
+	
+OnPCLoginEvent:
+if( $Durations4 > gettimetick(2) ){
+	dispbottom "[ System ]: Valkyrie's Blessing is currently Active.";
+}
+//initnpctimer;
+//end;
+
+end;
+}
+
+
+
+
+
+//protera,169,104,4	duplicate(Odin's Blessing)	Valkyrie's Blessing#prt	10308
+
+//@reloadnpc npc/valkyrie/blessing.txt

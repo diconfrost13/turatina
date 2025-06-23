@@ -1,0 +1,446 @@
+//===============================================//
+//  This script is made by Diconfrost VaNz       //
+//  https://www.facebook.com/diconfrost13    	 //
+//  https://www.facebook.com/diconfrostvanz	 //
+//                   		                 //
+//===============================================//
+
+clangroup,276,55,5	script	Mission Board	111,{
+		mes "[ ^9d3ad3Bounty Board^000000 ]";
+		mes "Hello ^ff0000"+ strcharinfo(0) +"^000000... What can I do for you today?";
+		next;
+		menu "Information",info,"Quest List",ques,"Rank Upgrade",rankup;
+
+rankup:
+		mes "[ ^9d3ad3Bounty Board^000000 ]";
+		mes "Total Adventurer Points: ^ff0000"+advpt+"^000000 Points";
+		mes "Total Adventurer XP: ^ff0000"+advxp+"^000000 XP";
+		next;
+		mes "[ ^9d3ad3Bounty Board^000000 ]";
+		mes "Do you want to upgrade your current rank?";
+		menu "Yes",rankyes,"No",rankno;
+rankyes:
+		next;
+		mes "[ ^9d3ad3Bounty Board^000000 ]";
+		mes "If you're trying to upgrade your rank, we have a few things we wanna check before anything else.";
+		next;
+		mes "[ ^9d3ad3Bounty Board^000000 ]";
+		mes "You need to collect certain ^ff0000Adventurer Points^000000 and ^ff0000Adventurer XP^000000 to upgrade your rank.";
+		next;
+		message strcharinfo(0),"Your current rank is: [ rawr ].";
+		mes "[ ^9d3ad3Bounty Board^000000 ]";
+		mes "Vanguard: ^ff000035,000^000000XP and ^ff0000500^000000 Points";
+		mes "Sentinel: ^ff0000115,000^000000XP and ^ff0000700^000000 Points";
+		mes "Warden: ^ff0000175,000^000000XP and ^ff00001,000^000000 Points";
+		mes "Revenant: ^ff0000215,000^000000XP and ^ff00001,300^000000 Points";
+		mes "Dreadknight: ^ff0000280,000^000000XP and ^ff00001,700^000000 Points";
+		mes "Paragon: ^ff0000400,000^000000XP and ^ff00002,000^000000 Points";
+		next;
+		mes "[ ^9d3ad3Bounty Board^000000 ]";
+		mes "You want to continue?";
+		menu "Proceed...",rankyes2,"Maybe next time",rankno;
+rankyes2:
+		next;
+		mes "[ ^9d3ad3Bounty Board^000000 ]";
+		mes "*PROCESSING..............*";
+		if(advxp >= 35000){
+					next;
+					if(advpt >= 500){
+					mes "[ ^9d3ad3Bounty Board^000000 ]";
+					mes "Loading..................";
+					next;
+					mes "[ ^9d3ad3Bounty Board^000000 ]";
+					mes "Congratulations "+ strcharinfo(0) +", you've upgraded your rank.";
+					mes "Your current rank now is: ^ff0000Vanguard^000000";
+					advpt -= 500;
+					#AdventurerRank += 1;
+					close;
+					}
+					}
+		if(advxp >= 115000){
+					next;
+					if(advpt >= 700){
+					mes "[ ^9d3ad3Bounty Board^000000 ]";
+					mes "Loading..................";
+					next;
+					mes "[ ^9d3ad3Bounty Board^000000 ]";
+					mes "Congratulations "+ strcharinfo(0) +", you've upgraded your rank.";
+					mes "Your current rank now is: ^ff0000Sentinel^000000";
+					advpt -= 700;
+					#AdventurerRank += 1;
+					close;
+					}
+					}
+		if(advxp >= 175000){
+					next;
+					if(advpt >= 1000){
+					mes "[ ^9d3ad3Bounty Board^000000 ]";
+					mes "Loading..................";
+					next;
+					mes "[ ^9d3ad3Bounty Board^000000 ]";
+					mes "Congratulations "+ strcharinfo(0) +", you've upgraded your rank.";
+					mes "Your current rank now is: ^ff0000Warden^000000";
+					advpt -= 1000;
+					#AdventurerRank += 1;
+					close;
+					}
+					}
+		if(advxp >= 215000){
+					next;
+					if(advpt >= 1300){
+					mes "[ ^9d3ad3Bounty Board^000000 ]";
+					mes "Loading..................";
+					next;
+					mes "[ ^9d3ad3Bounty Board^000000 ]";
+					mes "Congratulations "+ strcharinfo(0) +", you've upgraded your rank.";
+					mes "Your current rank now is: ^ff0000Revenant^000000";
+					advpt -= 1300;
+					#AdventurerRank += 1;
+					close;
+					}
+					}
+		if(advxp >= 280000){
+					next;
+					if(advpt >= 1700){
+					mes "[ ^9d3ad3Bounty Board^000000 ]";
+					mes "Loading..................";
+					next;
+					mes "[ ^9d3ad3Bounty Board^000000 ]";
+					mes "Congratulations "+ strcharinfo(0) +", you've upgraded your rank.";
+					mes "Your current rank now is: ^ff0000Dreadknight^000000";
+					advpt -= 1700;
+					#AdventurerRank += 1;
+					close;
+					}
+					}
+		if(advxp >= 400000){
+					next;
+					if(advpt >= 2000){
+					mes "[ ^9d3ad3Bounty Board^000000 ]";
+					mes "Loading..................";
+					next;
+					mes "[ ^9d3ad3Bounty Board^000000 ]";
+					mes "Congratulations "+ strcharinfo(0) +", you've upgraded your rank.";
+					mes "Your current rank now is: ^ff0000Paragon^000000";
+					advpt -= 2000;
+					#AdventurerRank += 1;
+					close;
+					}
+					}
+rankfail:
+		mes "[ ^9d3ad3Bounty Board^000000 ]";
+		mes "Sorry "+ strcharinfo(0) +", you failed to upgrade your rank.";
+		mes "Kindly, check what you lack and get back to me again.";
+		close;
+		
+rankno:
+		next;
+		mes "[ ^9d3ad3Bounty Board^000000 ]";
+		mes "Okay, come back whenever you decide.";
+		close;
+
+
+info:
+		mes "[ ^9d3ad3Bounty Board^000000 ]";
+		mes "Total Adventurer Points: ^ff0000"+advpt+"^000000 Points";
+		mes "Total Adventurer XP: ^ff0000"+advxp+"^000000 XP";
+		next;
+		mes "[ ^9d3ad3Bounty Board^000000 ]";
+		mes "If you want to upgrade your rank, you need to collect certain ^ff0000Adventurer Points^000000 and ^ff0000Adventurer XP^000000 to upgrade your rank.";
+		next;
+		mes "[ ^9d3ad3Bounty Board^000000 ]";
+		mes "Vanguard: ^ff000035,000^000000XP and ^ff0000500^000000 Points";
+		mes "Sentinel: ^ff0000115,000^000000XP and ^ff0000700^000000 Points";
+		mes "Warden: ^ff0000175,000^000000XP and ^ff00001,000^000000 Points";
+		mes "Revenant: ^ff0000215,000^000000XP and ^ff00001,300^000000 Points";
+		mes "Dreadknight: ^ff0000280,000^000000XP and ^ff00001,700^000000 Points";
+		mes "Paragon: ^ff0000400,000^000000XP and ^ff00002,000^000000 Points";
+		close;
+
+ques:
+	if(mob_quest == 0){
+		mes "[ ^9d3ad3Bounty Board^000000 ]";
+		mes ""+ strcharinfo(0) +"...Please select your Rank.";
+		next;
+
+		.@loc_quest = select("Newbie:Vanguard:Sentinel:Warden:Revenant:Dreadknight:Paragon");
+		if(#AdventurerRank < (.@loc_quest - 1)){
+			message strcharinfo(0),"Your rank needs to be [ "+.adventurer_rank$[.@loc_quest - 1]+" ] to take these quests.";
+			end;
+		}
+OnReqSkip:
+		for(.@i = 1; .@i < getarraysize(getd("."+.@loc_quest+"_mobs")); .@i++)
+				.@menu$ += "~ ^0000ff"+getmonsterinfo(getd("."+.@loc_quest+"_mobs["+.@i+"]"),MOB_NAME)+"^000000:";
+		mes "[ ^9d3ad3Bounty Board^000000 ]";
+		mes "Select monster to hunt: ";
+		mes "------------------------";
+		mes "Min: ^ff000020^000000 Max: ^0000ff300^000000";
+		.@mob_quest = select(.@menu$);
+		clear;
+		for(.@i = 1; .@i < getarraysize(.mob_count); .@i++)
+			.@count_menu$ += .mob_count[.@i]+" [ ^0000ff"+.pts_count[.@i]+" pts^000000 ]:";
+		switch(.@loc_quest){
+			case 1: //Newbie
+				.@ptmultiplier = 1; 
+				.@xpmultiplier = 1; 
+			break; 
+			case 2: //Vanguard
+				if(#AdventurerRank > 2){
+					.@ptmultiplier = 1;
+					.@xpmultiplier = 1;
+					break;
+				}	
+				.@ptmultiplier = 1;
+				.@xpmultiplier = 1;
+			break;
+			case 3: //Sentinel
+				if(#AdventurerRank > 3){
+					.@ptmultiplier = 1;
+					.@xpmultiplier = 1;
+					break;
+				}
+				.@ptmultiplier = 2; 
+				.@xpmultiplier = 2; 
+			break; 
+			case 4: //Warden
+				if(#AdventurerRank > 4){
+					.@ptmultiplier = 2;
+					.@xpmultiplier = 1;
+					break;
+				}
+				.@ptmultiplier = 2; 
+				.@xpmultiplier = 2; 
+			break; 
+			case 5: //Revenant
+				if(#AdventurerRank > 5){
+					.@ptmultiplier = 2;
+					.@xpmultiplier = 1;
+					break;
+				}
+				.@ptmultiplier = 3; 
+				.@xpmultiplier = 2; 
+			break; 
+			case 6: //Dreadknight
+				if(#AdventurerRank > 6){
+					.@ptmultiplier = 3;
+					.@xpmultiplier = 2;
+					break;
+				}
+				.@ptmultiplier = 3; 
+				.@xpmultiplier = 2; 
+			break; 
+			case 7: //Paragon
+				if(#AdventurerRank > 7){
+					.@ptmultiplier = 3;
+					.@xpmultiplier = 2;
+					break;
+				}
+				.@ptmultiplier = 3;
+				.@xpmultiplier = 3;
+			break; 
+			default: dispbottom "An Error has occured - #MissionBoard - Please contact and show to a developer"; end;
+		}
+		bounty_achchk = getd("."+.@loc_quest+"_achievements["+.@mob_quest+"]");
+		if(achievementexists(bounty_achchk)){
+			mes "[ ^9d3ad3Bounty Board^000000 ]";
+			mes "^ff0000--- Bounty complete ---^000000";
+			mes "^0000ffCome back tomorrow^000000";
+			bounty_achchk = 0;
+			close;
+		}
+		bounty_advpt = ((getmonsterinfo(getd("."+.@loc_quest+"_mobs["+.@mob_quest+"]"),MOB_LV)/3) * .@ptmultiplier) / 10);
+		bounty_zeny = (getmonsterinfo(getd("."+.@loc_quest+"_mobs["+.@mob_quest+"]"),MOB_LV) * 5 / 3) * 15;
+		bounty_bexp = ((getmonsterinfo(getd("."+.@loc_quest+"_mobs["+.@mob_quest+"]"),MOB_BASEEXP) * 25) /10);
+		bounty_jexp = ((getmonsterinfo(getd("."+.@loc_quest+"_mobs["+.@mob_quest+"]"),MOB_JOBEXP) * 25) /10);
+		bounty_advxp = ((getmonsterinfo(getd("."+.@loc_quest+"_mobs["+.@mob_quest+"]"),MOB_LV) * 5 / 3) * .@xpmultiplier) / 10);
+		//minimums
+		if(bounty_advpt == 0) bounty_advpt = 1;
+		if(bounty_advxp == 0) bounty_advxp = 1;
+		mes "[ ^9d3ad3Bounty Board^000000 ]";
+		mes "Target Monster: ^0000ff"+getmonsterinfo(getd("."+.@loc_quest+"_mobs["+.@mob_quest+"]"),MOB_NAME)+"^000000";
+		mes "Adventurer Points: ^ff0000"+bounty_advpt+"^000000 per kill";
+		mes "Adventurer XP: ^ff0000"+bounty_advxp+"^000000 XP per kill";
+		mes "Zeny: ^ff0000"+bounty_zeny+"^000000 per kill";
+		mes "Base XP: ^ff0000"+callfunc("F_InsertComma",bounty_bexp)+"^000000 per kill";
+		mes "Job XP: ^ff0000"+callfunc("F_InsertComma",bounty_jexp)+"^000000 per kill";
+		mes "----------------";
+		mes "Will you accept this quest?";
+		menu "Yes",-;
+		clear;
+		mes "[ ^9d3ad3Bounty Board^000000 ]";
+		mes "----- Current Quest -----";
+		mes "Target Monster: ^0000ff"+getmonsterinfo(getd("."+.@loc_quest+"_mobs["+.@mob_quest+"]"),MOB_NAME)+"^000000";
+		quest_loc = .@loc_quest;
+		quest_mob = getd("."+.@loc_quest+"_mobs["+.@mob_quest+"]");
+		quest_kill = 0;
+		mob_quest = 1;
+		close;
+	}
+	if(mob_quest == 1){
+		menu "Submit Quest",-,"Cancel Quest",OnCancel;
+		if(quest_kill < 20){
+			mes "[ ^9d3ad3Bounty Board^000000 ]";
+			mes "Target Monster: ^0000ff"+getmonsterinfo(quest_mob,MOB_NAME)+"^000000";
+			mes "Minimum kill required: ^ff000020^000000";
+			mes "Amount hunted: ^ff0000"+quest_kill+"^000000";
+			mes "----------------";
+			mes "Adventurer Points: ^ff0000"+(bounty_advpt * quest_kill)/100+"^000000 Points";
+			mes "Adventurer XP: ^ff0000"+bounty_advxp * quest_kill+"^000000 XP";
+			mes "Zeny: ^ff0000"+bounty_zeny * quest_kill+"^000000 Zeny";
+			mes "Base XP: ^ff0000"+callfunc("F_InsertComma",bounty_bexp * quest_kill)+"^000000 per kill";
+			mes "Job XP: ^ff0000"+callfunc("F_InsertComma",bounty_jexp * quest_kill)+"^000000 per kill";
+			close;
+		}
+		mes "[ ^9d3ad3Bounty Board^000000 ]";
+		mes "Current Rewards";
+		mes "----------------";
+		mes "Adventurer Points: ^ff0000"+(bounty_advpt * quest_kill)/100+"^000000 Points";
+		mes "Adventurer XP: ^ff0000"+bounty_advxp * quest_kill+"^000000 XP";
+		mes "Zeny: ^ff0000"+bounty_zeny * quest_kill+"^000000 Zeny";
+		mes "Base XP: ^ff0000"+callfunc("F_InsertComma",bounty_bexp * quest_kill)+"^000000 per kill";
+		mes "Job XP: ^ff0000"+callfunc("F_InsertComma",bounty_jexp * quest_kill)+"^000000 per kill";
+		mes "----------------";
+		mes "Submit Quest?";
+		menu "Submit Quest",-,"Cancel Quest",OnCancel;
+		clear;
+		mes "[ ^9d3ad3Bounty Board^000000 ]";
+		mes "Quest Completed!";
+		mes "----------------";
+		mes "Target Monster: ^0000ff"+getmonsterinfo(quest_mob,MOB_NAME)+"^000000";
+		mes "Amount hunted: ^ff0000"+quest_kill+"^000000";
+		mes "Adventurer Points: ^ff0000"+(bounty_advpt * quest_kill)/100+"^000000 Points";
+		mes "Adventurer XP: ^ff0000"+bounty_advxp * quest_kill+"^000000 XP";
+		mes "Zeny: ^ff0000"+bounty_zeny * quest_kill+"^000000 Zeny";
+		mes "Base XP: ^ff0000"+callfunc("F_InsertComma",bounty_bexp * quest_kill)+"^000000 per kill";
+		mes "Job XP: ^ff0000"+callfunc("F_InsertComma",bounty_jexp * quest_kill)+"^000000 per kill";
+		advpt += (bounty_advpt * quest_kill)/100;
+		advxp += bounty_advxp * quest_kill;
+		next;
+		mes "[ ^9d3ad3Bounty Board^000000 ]";
+		mes "----------------";
+		
+
+		AdventurerXP += 0;
+		Zeny += bounty_zeny * (quest_kill/2);
+		getexp bounty_bexp * (quest_kill/3),bounty_jexp * (quest_kill/3);
+		.@check = quest_kill
+		quest_loc = 0;
+		quest_mob = 0;
+		quest_kill = 0;
+		mob_quest = 0;
+		bounty_advpt = 0;
+		bounty_zeny = 0;
+		bounty_advxp = 0;
+		if(!achievementexists(bounty_achchk))
+			achievementcomplete(bounty_achchk);
+		bounty_achchk = 0;
+		close;
+	}
+end;
+OnCancel:
+	menu "Cancel current quest",-;
+	quest_loc = 0;
+	quest_mob = 0;
+	quest_kill = 0;
+	mob_quest = 0;
+	bounty_advpt = 0;
+	bounty_zeny = 0;
+	bounty_advxp = 0;
+	bounty_achchk = 0;
+	mes "[ ^9d3ad3Bounty Board^000000 ]";
+	mes "Quest has been cancelled.";
+	mes "----------------";
+	close;
+end;
+
+OnNPCKillEvent:
+	if(killedrid != quest_mob) end;
+	else{
+		.@party_id = getcharid(1);
+		getmapxy(.@main_map$,.@main_x,.@main_y,BL_PC);
+		if(quest_kill >= 300){
+			message strcharinfo(0),"Quest: Kill "+getmonsterinfo(quest_mob,MOB_NAME)+" reached maximum amount!";
+			end;
+		}
+		if( !.@party_id ){
+			quest_kill++;
+			message strcharinfo(0),"Adventurer Kill "+getmonsterinfo(quest_mob,MOB_NAME)+" total : [ "+quest_kill+" ]";
+			end;
+		}
+		else{
+			.@aid = getcharid(3);
+			.@mmap$ = strcharinfo(3);
+			.@killed = killedrid;
+			.@killer_level = BaseLevel;
+			getpartymember .@party_id,0;
+			getpartymember .@party_id,1;
+			getpartymember .@party_id,2;
+			for( .@i = 0; .@i < $@partymembercount; .@i++ )
+				if( isloggedin( $@partymemberaid[.@i],$@partymembercid[.@i] ) ){
+					getmapxy( .@map$,.@x,.@y,BL_PC,$@partymembername$[.@i] );
+					if( .@map$ == .@mmap$ )
+						if(distance(.@main_x,.@main_y,.@x,.@y) < 200)
+							if( attachrid( $@partymemberaid[.@i] ) ){
+							if(BaseLevel < .@killer_level)
+								.@limit = .@killer_level - BaseLevel;
+							else if(BaseLevel > .@killer_level)
+								.@limit = BaseLevel - .@killer_level;
+							if(.@limit > 15) end;
+								if(.@killed != quest_mob) end;
+									if(quest_kill > 300){
+										message strcharinfo(0),"Adventurer Quest: Kill "+getmonsterinfo(quest_mob,MOB_NAME)+" reached maximum amount!";
+										end;
+									}
+								quest_kill++;
+								message strcharinfo(0),"Adventurer Kill "+getmonsterinfo(quest_mob,MOB_NAME)+" total : [ "+quest_kill+" ]";
+							}
+				}
+		}
+	}
+end;
+OnInit:
+	questinfo 1,QTYPE_JOB2,2;
+	setarray .1_mobs[1], 1113,1063,1007,1011,1010,1004,1052,1020,1015,1014,1013,1068,1024,1094,1972,1060,1111; //Newbie
+	setarray .2_mobs[1], 1030,1016,1118,1127,1139,1144,1153,1158,1165,1169,1179,1417,1037,1165,1248; //Vanguard
+	setarray .3_mobs[1], 1271,1403,1099,1882,1102,1408,1166,1109,1380,1149,1249,1410,1045,1154,1189,1275; //Sentinel
+	setarray .4_mobs[1], 1029,1257,1838,1140,1143,1264,1253,1061,1163,1065,1207,1201,1513; //Warden
+	setarray .5_mobs[1], 1193,1271,1687,1632,1213,1680,1035,1255,1180,1718,1370,1148,1379; //Revenant
+	setarray .6_mobs[1], 1402,1194,1699,1838,1192,1197,1510,1777,1257,1131,1219,1098,1867; //Dreadknight
+	setarray .7_mobs[1], 1769,1275,1735,1773,1866,1374,1772,1884,1865,1371,1870,1831,1920; //Paragon
+	
+	setarray .1_achievements[1],300000,300001,300002,300003,300004,300005,300006,300007,300008
+							   ,300009,300010,300011,300012,300013,300079,300080,300081;
+	setarray .2_achievements[1],300014,300015,300016,300017,300018,300019,300020,300021,300022
+							   ,300023,300024,300025,300082,300083,300084;
+	setarray .3_achievements[1],300026,300027,300028,300029,300030,300031,300032,300033,300034
+							   ,300035,300036,300037,300039,300085,300086,300087;
+	setarray .4_achievements[1],300039,300040,300041,300042,300043,300044,300045,300046,300047
+							   ,300048,300088,300089,300090;
+	setarray .5_achievements[1],300049,300050,300051,300052,300053,300054,300055,300056,300057
+							   ,300058,300091,300092,300093;
+	setarray .6_achievements[1],300059,300060,300061,300062,300063,300064,300065,300066,300067
+							   ,300068,300094,300095,300096;
+	setarray .7_achievements[1],300069,300070,300071,300072,300073,300074,300075,300076,300077
+							   ,300078,300097,300098,300099;
+
+	setarray .adventurer_rank$[0],"Newbie","Vanguard","Sentinel","Warden","Revenant","Dreadknight","Paragon";//"Bronze","Silver","Gold","Platinum","Hero";
+	while(1){ sleep 1000; showscript "Mission Board"; }
+end;
+}
+
+clangroup,243,19,5	script	Adventurer's Shop	669,{
+	mes "^FFA500[Adventurer's Shop]^000000";
+	mes "You can spend your Adventurer Points here";
+	mes "^FFFFFF_^000000";
+	mes "You current points: ^0000FF"+advpt+"^000000";
+	callshop "advshop",1;
+	end;
+
+OnInit:
+	while(1){ sleep 1000; showscript "Adventurer's Shop"; }
+end;
+}
+//ADD YOUR ITEMS HERE
+-	pointshop	advshop	-1,advpt,607:10,608:10
+
+

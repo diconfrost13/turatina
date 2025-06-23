@@ -1,0 +1,190 @@
+-	script	autoannounce	-1,{
+
+        OnInit:
+    while(1) {
+	announce "Welcome To RagManok Immortals! Enjoy Your Stay Here!",bc_all;
+	sleep 300000;
+
+	announce "If you found any BUG, please report it immediately to any of the GM-Team",bc_all;
+	sleep 300000;
+
+	announce "REMEMBER: No GM has the right to ask a player of any of his/her account information, so please, NEVER let anyone deceive you.",bc_all;
+	sleep 300000;
+
+	announce "Please don't forget to vote us via our website. Also don't forget to put review in ratemyserver.",bc_all;
+	sleep 300000;
+
+    }
+}
+
+-	script	homebind	-1,{
+	OnInit:
+		bindatcmd("home","homebind::OnAtcommand",0,10);
+		end;
+	
+
+	OnAtcommand:
+		warp "SavePoint", 0, 0;
+		end;
+
+}
+
+
+guild_vs2	mapflag	pvp
+guild_vs2	mapflag	nobranch
+guild_vs2	mapflag	nosave	SavePoint
+
+sec_in01	mapflag	nowarp
+sec_in01	mapflag	nowarpto
+sec_in01	mapflag	noteleport
+sec_in01	mapflag	nosave
+
+sec_in02	mapflag	nowarp
+sec_in02	mapflag	nowarpto
+sec_in02	mapflag	noteleport
+sec_in02	mapflag	nosave
+
+lhz_dun04	mapflag	nowarp
+lhz_dun04	mapflag	nowarpto
+lhz_dun04	mapflag	noteleport
+lhz_dun04	mapflag	nosave
+
+new_1-1	mapflag	nosave
+new_1-1	mapflag	noteleport
+new_1-1	mapflag	nowarp
+new_1-1	mapflag	nowarpto
+
+eclage	mapflag	nosave
+eclage	mapflag	noteleport
+eclage	mapflag	nowarp
+eclage	mapflag	nowarpto
+
+dicastes01	mapflag	nosave
+dicastes01	mapflag	noteleport
+dicastes01	mapflag	nowarp
+dicastes01	mapflag	nowarpto
+
+dicastes02	mapflag	nosave
+dicastes02	mapflag	noteleport
+dicastes02	mapflag	nowarp
+dicastes02	mapflag	nowarpto
+
+manuk	mapflag	nosave
+manuk	mapflag	noteleport
+manuk	mapflag	nowarp
+manuk	mapflag	nowarpto
+
+malaya	mapflag	nosave
+malaya	mapflag	noteleport
+malaya	mapflag	nowarp
+malaya	mapflag	nowarpto
+
+brasilis	mapflag	nosave
+brasilis	mapflag	noteleport
+brasilis	mapflag	nowarp
+brasilis	mapflag	nowarpto
+
+dewata	mapflag	nosave
+dewata	mapflag	noteleport
+dewata	mapflag	nowarp
+dewata	mapflag	nowarpto
+
+splendide	mapflag	nosave
+splendide	mapflag	noteleport
+splendide	mapflag	nowarp
+splendide	mapflag	nowarpto
+
+mora	mapflag	nosave
+mora	mapflag	noteleport
+mora	mapflag	nowarp
+mora	mapflag	nowarpto
+
+malangdo	mapflag	nosave
+malangdo	mapflag	noteleport
+malangdo	mapflag	nowarp
+malangdo	mapflag	nowarpto
+
+mid_camp	mapflag	nosave
+mid_camp	mapflag	noteleport
+mid_camp	mapflag	nowarp
+mid_camp	mapflag	nowarpto
+
+dic_dun01	mapflag	nosave
+dic_dun01	mapflag	noteleport
+dic_dun01	mapflag	nowarp
+dic_dun01	mapflag	nowarpto
+
+dic_fild01	mapflag	nosave
+dic_fild01	mapflag	noteleport
+dic_fild01	mapflag	nowarp
+dic_fild01	mapflag	nowarpto
+
+dic_fild02	mapflag	nosave
+dic_fild02	mapflag	noteleport
+dic_fild02	mapflag	nowarp
+dic_fild02	mapflag	nowarpto
+
+man_fild01	mapflag	nosave
+man_fild01	mapflag	noteleport
+man_fild01	mapflag	nowarp
+man_fild01	mapflag	nowarpto
+
+ma_fild01	mapflag	nosave
+ma_fild01	mapflag	noteleport
+ma_fild01	mapflag	nowarp
+ma_fild01	mapflag	nowarpto
+
+man_fild02	mapflag	nosave
+man_fild02	mapflag	noteleport
+man_fild02	mapflag	nowarp
+man_fild02	mapflag	nowarpto
+
+man_fild03	mapflag	nosave
+man_fild03	mapflag	noteleport
+man_fild03	mapflag	nowarp
+man_fild03	mapflag	nowarpto
+
+ma_fild02	mapflag	nosave
+ma_fild02	mapflag	noteleport
+ma_fild02	mapflag	nowarp
+ma_fild02	mapflag	nowarpto
+
+spl_fild01	mapflag	nosave
+spl_fild01	mapflag	noteleport
+spl_fild01	mapflag	nowarp
+spl_fild01	mapflag	nowarpto
+
+spl_fild02	mapflag	nosave
+spl_fild02	mapflag	noteleport
+spl_fild02	mapflag	nowarp
+spl_fild02	mapflag	nowarpto
+
+spl_fild03	mapflag	nosave
+spl_fild03	mapflag	noteleport
+spl_fild03	mapflag	nowarp
+spl_fild03	mapflag	nowarpto
+
+bif_fild01	mapflag	nosave
+bif_fild01	mapflag	noteleport
+bif_fild01	mapflag	nowarp
+bif_fild01	mapflag	nowarpto
+
+bif_fild02	mapflag	nosave
+bif_fild02	mapflag	noteleport
+bif_fild02	mapflag	nowarp
+bif_fild02	mapflag	nowarpto
+
+ecl_fild01	mapflag	nosave
+ecl_fild01	mapflag	noteleport
+ecl_fild01	mapflag	nowarp
+ecl_fild01	mapflag	nowarpto
+
+dew_fild01	mapflag	nosave
+dew_fild01	mapflag	noteleport
+dew_fild01	mapflag	nowarp
+dew_fild01	mapflag	nowarpto
+
+bra_fild01	mapflag	nosave
+bra_fild01	mapflag	noteleport
+bra_fild01	mapflag	nowarp
+bra_fild01	mapflag	nowarpto

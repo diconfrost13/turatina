@@ -1,0 +1,210 @@
+clangroup,264,32,4	script	VIP Central	4_F_KAFRA1,{
+OnTalk:
+	mes .npc$;
+	mes (gettime(3)>= 6&&gettime(3)<= 12?"Good Morning":(gettime(3)>=13&&gettime(3)<=18?"Good Afternoon":"Good Evening"))+", ^008aff"+strcharinfo(0)+"^000000 !";
+	mes "Welcome to VIP Central.";
+	if (vip_status(1)) {
+		mes "^008affYour VIP access will expire on " + callfunc("Time2Str",vip_status(2)) + ".^000000";
+		mes " ";		
+	}
+	mes "How can I help?";
+	next;
+	switch (select(.bcor$+"I want to go to Central VIP.",""+((vip_status(1))?""+.bcor$+"I want to extend my time ^008affVIP^000000.":""+.bcor$+"I wish to become a ^008affVIP^000000 player."),""+.rcor$+"I do not want anything.")){
+		case 1:
+			if (!vip_status(1) ) {
+				mes .npc$;
+				mes "Excuse me! Access to VIP Central is only allowed to ^008affVIP^000000 players.";
+				mes "-----------------------------------";
+				mes "Visit our website and learn how to become a ^008affVIP^000000 player.";
+				mes "-----------------------------------";
+				close;
+			}
+			warp .map$,.cord[0],.cord[1];
+			end;
+		case 2:
+			mes .npc$;
+			mes "How many days of access ^008affVIP^000000 do you want to acquire?";
+			next;
+			.@i = select(
+				.bcor$+""+.vip_day[0] + " Days."
+				,.bcor$+""+.vip_day[1] + " Days."
+				,.bcor$+""+.vip_day[2] + " Days."
+				) - 1;
+				
+			mes .npc$;
+			mes "You chose the plan of:";
+			mes "^4527A0VIP:^000000 "+.vip_day[.@i]+" VIP days.";
+			mes "^4527A0Price:^000000 "+F_InsertComma(.vip_cashpoint[.@i])+" #CASHPOINTS.";
+			sleep2 1000;
+			mes " ";
+			mes " ";
+			mes "What do you want to do?";
+			next;
+			switch(select(.bcor$+"Purchase:"+.rcor$+"Cancel")){
+				case 1:
+					if ( #CASHPOINTS < .vip_cashpoint[.@i] ) {
+					mes .npc$;
+					mes "You do not have the quantity of ^008aff"+F_InsertComma(.vip_cashpoint[.@i])+" #CASHPOINTS^000000.";
+					close;
+				}
+				else {
+					#CASHPOINTS -= .vip_cashpoint[.@i];
+					vip_time (.vip_day[.@i] * 1440);
+					mes .npc$;
+					mes "Congratulations you just got "+.vip_day[.@i]+" days VIP.";
+					close;
+				}
+				end;
+				case 2:
+					mes .npc$;
+					mes "All right, come back whenever you want.";
+					close;
+			}
+
+		case 3:
+			close;
+	}
+
+OnInit:
+	.npc$ = "^FF7F00[ VIP Central ]^000000";						// Name of NPC;
+	.bcor$ = "^008aff[»]^000000 ";									// Option Button Symbol;
+	.rcor$ = "^ff0000[»]^000000 ";									// Cancel button symbol;
+	setarray .vip_day,7,14,30;										// Number of days that can be purchased;
+	setarray .vip_cashpoint,4000,7000,10000;						// Price in #CASHPOINTS;
+	.map$ = "sec_in02";												// VIP Room Map;
+	setarray .cord,130,161;											// X and Y Coordinate;
+	end;
+}
+
+-	script	login	-1,{
+OnPCLoginEvent:
+	if (vip_status(1)) {
+		dispbottom "^008affYour VIP access will expire on " + callfunc("Time2Str",vip_status(2)) + ".^000000";
+		deltimer strnpcinfo(3)+"::OnPCLoginEvent";
+	}
+
+}
+
+
+sec_in02,140,169,5	script	Build Manager	757,{
+
+function ManageBuild;
+
+mes "^FF0000Build Manager^000000";
+mes "Hello! Are you interested in my services? If yes, you should get premium ticket and be a premium user.";
+next;
+
+	if (vip_status(1)) {
+mes "^FF0000Build Manager^000000";
+mes "This is for Premium Users.";
+mes "Select Your Services";
+next;
+switch( select( ( .BMMode & 1 )?"^FF0000Save & Switch Builds^000000":"",
+				( .BMMode & 2 )?"^0000FFReset Status^000000":"",	
+				( .BMMode & 4 )?"^0000FFReset Skills^000000":"")){
+	Case 1:
+		for( set .@i,1; .@i <= .MaxSlots; set .@i,.@i + 1 )
+			set .@Menu$,.@Menu$ + (( getd( "Slot_"+.@i+"$" ) == "" )?"^FF0000Empty Slot^000000":getd( "Slot_"+.@i+"$" ) )+":";
+		set .@Slot,select( .@Menu$ );
+		do{
+			next;
+			mes "Build : ^FF0000"+(( getd( "Slot_"+.@Slot+"$" ) == "" )?"Slot "+.@Slot:getd( "Slot_"+.@Slot+"$" ) )+"^000000";
+			mes "STR - ^0000FF"+getd( "STR_"+.@Slot )+"^000000      INT - ^0000FF"+getd( "INT_"+.@Slot )+"^000000";
+			mes "AGI - ^0000FF"+getd( "AGI_"+.@Slot )+"^000000      DEX - ^0000FF"+getd( "DEX_"+.@Slot )+"^000000";
+			mes "VIT - ^0000FF"+getd( "VIT_"+.@Slot )+"^000000      LUK - ^0000FF"+getd( "LUK_"+.@Slot )+"^000000";
+			mes " ";
+			mes "Remaining Points : ^0000FF"+getd( "STATS_"+.@Slot )+"^000000";
+			set .@Option,select(( getd( "Slot_"+.@Slot+"$" ) == "" )?"":"^0000FFSwitch",
+								( getd( "Slot_"+.@Slot+"$" ) == "" )?"Save":"",
+								( getd( "Slot_"+.@Slot+"$" ) == "" )?"":"^FF0000Clear" );
+			ManageBuild( .@Slot,.@Option);
+		}while( .@Option != 1 );
+		break;
+	Case 2:
+		ResetStatus;
+		mes "Status has been Reseted.";
+		break;
+	Case 3:
+		ResetSkill;
+		mes "Skills has been Reseted.";
+		break;
+
+	}
+close;
+}
+close;
+
+function	ManageBuild	{
+switch( getarg(1) ){
+	Case 1:	//	Switch Build
+		message strcharinfo(0),"Build has been ^FF0000Switched^000000.";
+			ResetStatus;
+			set StatusPoint,getd( "STATS_"+getarg(0) );
+			statusup2 bStr,getd( "STR_"+getarg(0) ) - 1;
+			statusup2 bAgi,getd( "AGI_"+getarg(0) ) - 1;
+			statusup2 bVit,getd( "VIT_"+getarg(0) ) - 1;
+			statusup2 bInt,getd( "INT_"+getarg(0) ) - 1;
+			statusup2 bDex,getd( "DEX_"+getarg(0) ) - 1;
+			statusup2 bLuk,getd( "LUK_"+getarg(0) ) - 1;
+		break;
+	Case 2:	//	Save Build
+			setd( "STR_"+getarg(0) ),readparam(bStr);
+			setd( "AGI_"+getarg(0) ),readparam(bAgi);
+			setd( "VIT_"+getarg(0) ),readparam(bVIT);
+			setd( "INT_"+getarg(0) ),readparam(bInt);
+			setd( "DEX_"+getarg(0) ),readparam(bDex);
+			setd( "LUK_"+getarg(0) ),readparam(bLuk);
+			setd( "STATS_"+getarg(0) ),StatusPoint;
+		if( .Length[0] < .Length[1] && .Length[0] ){
+			mes "Input a ^FF0000Name^000000 for this Slot.";
+			mes "Name Length : "+.Length[0]+" ~ "+.Length[1]+" Chars";
+			do{
+				input getd( "Slot_"+getarg(0)+"$" );
+			}while( getstrlen( getd( "Slot_"+getarg(0)+"$" ) ) < .Length[0] || getstrlen( getd( "Slot_"+getarg(0)+"$" ) ) > .Length[1] );
+		}else{
+			setd( "Slot_"+getarg(0)+"$" ),"Build "+getarg(0);
+		}
+		message strcharinfo(0),"Build has been ^FF0000Saved^000000.";
+		break;
+	Case 3:	//	Remove Build
+		message strcharinfo(0),"Build has been ^FF0000Cleared^000000.";
+			setd( "STR_"+getarg(0) ),0;
+			setd( "AGI_"+getarg(0) ),0;
+			setd( "VIT_"+getarg(0) ),0;
+			setd( "INT_"+getarg(0) ),0;
+			setd( "DEX_"+getarg(0) ),0;
+			setd( "LUK_"+getarg(0) ),0;
+			setd( "STATS_"+getarg(0) ),0;
+			setd( "Slot_"+getarg(0)+"$" ),"";
+		break;
+}
+return;
+}	
+	
+OnInit:
+// Mode of NPC
+// 1 = Save & Switch 
+// 2 = Reset Status
+// 4 = Reset Skills
+// 7 = All of Above [ 1+2+4 = 7 ]
+set .BMMode,7;
+// How Many Slots available to Save Status Builds.
+set .MaxSlots,5;
+// Enable Stats Slot Rename + Max Name Length ( 0 = Disable )
+setarray .Length,4,26; // Min. ~ Max. Words.
+end;
+
+
+
+}
+
+sec_in02,149,163,5	script	Warp me back	837,{
+			mes "^FF0000Build Manager^000000";
+			warp "clangroup",264,27;
+			end;
+
+OnInit:
+	while(1){ sleep 1000; showscript "Warp me back"; }
+end;
+
+}

@@ -1,0 +1,115 @@
+function	script	F_ArmorEvoStone	{
+	disable_items;
+	.@j = 0;
+	setarray .@armor_loc,EQI_COSTUME_HEAD_TOP,EQI_COSTUME_HEAD_MID,EQI_COSTUME_HEAD_LOW,EQI_COSTUME_GARMENT,EQI_SHADOW_WEAPON,EQI_SHADOW_ACC_R,EQI_SHADOW_ACC_L;
+	for(.@i = 0; .@i < getarraysize(.@armor_loc); .@i++){
+		if(getequipid(.@armor_loc[.@i]) != -1){
+			.@armor[.@j] = getequipid(.@armor_loc[.@i]);
+			.@loc[.@j] = .@armor_loc[.@i];
+			.@menu$ += getitemname(getequipid(.@armor_loc[.@i]))+":";
+			.@j++;
+		}
+	}
+	if(getarraysize(.@armor) < 1){
+		message strcharinfo(0),"You currently have no costumes equipped.";
+		end;
+	}
+	message strcharinfo(0),"Pick which costume do you wish to enchant";
+	.@s = select(.@menu$) - 1;
+	if(countitem(.@armor[.@s]) > 1){
+		message strcharinfo(0),"Make sure you do not have the same costume in your inventory.";
+		end;
+	}
+	.@enchant_chance = rand(1,10000);
+	.@refine = getequiprefinerycnt(.@loc[.@s]);
+	.@opt1 = getequipcardid(.@loc[.@s],0);
+	.@opt2 = getequipcardid(.@loc[.@s],1);
+	.@opt3 = getequipcardid(.@loc[.@s],2);
+	.@opt4 = getequipcardid(.@loc[.@s],3);
+	delequip .@loc[.@s];
+	getitem2 .@armor[.@s],1,1,.@refine,0,.@opt1,.@opt2,.@opt3,.@opt4;
+	equip .@armor[.@s];
+	if(.@enchant_chance <= 1000) //3% - 3 enchants
+		callfunc("F_PhiloStoneEvo",.@armor[.@s],.@loc[.@s],3,.@old_value$,.@old_id$,.@old_count);
+	else if(.@enchant_chance <= 5000) //25% - 2 enchants
+		callfunc("F_PhiloStoneEvo",.@armor[.@s],.@loc[.@s],2,.@old_value$,.@old_id$,.@old_count);
+	else // 1 enchant
+		callfunc("F_PhiloStoneEvo",.@armor[.@s],.@loc[.@s],1,.@old_value$,.@old_id$,.@old_count);
+	end;
+}
+
+
+function	script	F_PhiloStoneEvo	{ //Costume
+	disable_items;
+	delitem 25271,1;
+	//ATK, matk, flee, crit
+	//heal, heal rcvd, def, hit
+	//str, agi, vit, int, dex, luk
+	//max hp%, max sp%, aspd, crit dmg, , medium dmg
+	//wind res, fire res, earth res, water res
+	//dark res,holy res,ignore def, ignore mdef
+	//atk %, matk%, range atk, medium mdmg
+	setarray .@max_enchant[1]	,7,7,5,5 
+								,5,5,7,5
+								,2,2,2,2,2,2
+								,2,2,2,2,3
+								,2,2,2,2
+								,2,2,3,3
+								,3,3,2,3;
+								
+	setarray .@enchant_id[1]	,RDMOPT_VAR_ATTPOWER,RDMOPT_VAR_ATTMPOWER,RDMOPT_VAR_AVOIDSUCCESSVALUE,RDMOPT_VAR_CRITICALSUCCESSVALUE
+								,RDMOPT_HEAL_VALUE,RDMOPT_HEAL_MODIFY_PERCENT,RDMOPT_VAR_ITEMDEFPOWER,RDMOPT_VAR_HITSUCCESSVALUE		
+								,RDMOPT_VAR_STRAMOUNT,RDMOPT_VAR_AGIAMOUNT,RDMOPT_VAR_VITAMOUNT,RDMOPT_VAR_INTAMOUNT,RDMOPT_VAR_DEXAMOUNT,RDMOPT_VAR_LUKAMOUNT
+								,RDMOPT_VAR_MAXHPPERCENT,RDMOPT_VAR_MAXSPPERCENT,RDMOPT_VAR_PLUSASPDPERCENT,RDMOPT_DAMAGE_CRI_TARGET,RDMOPT_DAMAGE_SIZE_MIDIUM_TARGET
+								,RDMOPT_DAMAGE_PROPERTY_WIND_USER,RDMOPT_DAMAGE_PROPERTY_FIRE_USER,RDMOPT_DAMAGE_PROPERTY_GROUND_USER,RDMOPT_DAMAGE_PROPERTY_WATER_TARGET
+								,RDMOPT_DAMAGE_PROPERTY_DARKNESS_USER,RDMOPT_DAMAGE_PROPERTY_SAINT_USER,RDMOPT_CLASS_IGNORE_DEF_PERCENT_NORMAL,RDMOPT_CLASS_IGNORE_MDEF_PERCENT_NORMAL
+								,RDMOPT_VAR_ATKPERCENT,RDMOPT_VAR_MAGICATKPERCENT,RDMOPT_RANGE_ATTACK_DAMAGE_TARGET,RDMOPT_MDAMAGE_SIZE_MIDIUM_TARGET;
+				
+	setarray .@bonus$[1]		,"ATK","MATK","FLEE","CRIT"
+								,"HEALING %","HEAL RCVD %","DEF","HIT"
+								,"STR","AGI","VIT","INT","DEX","LUK"
+								,"MAX HP%","MAX SP%","ASPD %","CRIT DMG","MEDIUM DMG"
+								,"WIND RES","FIRE RES","EARTH RES","WATER RES"
+								,"DARK RES","HOLY RES","IGNORE DEF","IGNORE MDEF"
+								,"ATK %","MATK %","RANGE ATK","MEDIUM MDMG";
+	.@x = 0;
+	while(.@x < getarg(2)){
+		.@size = getarraysize(.@max_enchant) - 1;
+		.@rand = rand(1,.@size);
+		setarray .@id[.@x], .@enchant_id[.@rand];
+		if(.@x == 1)
+			setarray .@enchants[.@x], rand(2,.@max_enchant[.@rand] + 1);
+		else if(.@x == 2)
+			setarray .@enchants[.@x], rand(3,.@max_enchant[.@rand] + 2);
+		else
+		setarray .@enchants[.@x], rand(1,.@max_enchant[.@rand]);
+		.@x++;
+	}
+	if(.@x >= 4){
+		specialeffect2 99;
+		message strcharinfo(0),"Your equipment now glimmers with power!";
+	}
+	mes "[ Random Options Selection ]";
+	mes "--------------------------------";
+	mes "^00ff00New Stats^000000";
+	for(.@i = 0; .@i < getarg(2); .@i++){
+		mes "^0000ff"+.@bonus$[inarray(.@enchant_id[1],.@id[.@i])]+"^000000 + "+.@enchants[.@i];
+	}
+	message strcharinfo(0),"Your equipment is now bestowed with new powers.";
+	while(.@y < getarg(2)){
+		if(.@id[.@y] != 0)
+			setrandomoption(getarg(1),.@y,.@id[.@y],.@enchants[.@y],0);
+			.@y++;
+	}	
+	.@rand = rand(1,6);
+	switch(.@rand){
+		case 1: specialeffect2 54; sleep2 500; break;
+		case 2: specialeffect2 55; sleep2 500; break;
+		case 3: specialeffect2 56; sleep2 500; break;
+		case 4: specialeffect2 57; sleep2 500; break;
+		case 5: specialeffect2 58; sleep2 500; break;
+		case 6: specialeffect2 59; sleep2 500; break;
+	}
+	specialeffect2 119;
+	end;
+}

@@ -1,0 +1,65 @@
+-	script	gobind	-1,{
+	OnInit:
+		bindatcmd("go","gobind::OnAtcommand",0,10);
+		end;
+	
+
+	OnAtcommand:
+		set @warp$,.@atcmd_parameters$[0];
+		set @warp,@warp$;
+		if(set(.@a,@tick-gettimetick(2))>0){ dispbottom "You must wait "+.@a+" second(s) before warping."; end; }
+if(@warp$ == "list") { dispbottom "Usage: @go #"; 
+	dispbottom "0=Prontera         1=Morocc        2=Geffen      3=Payon      4=Alberta";
+	dispbottom "5=Izlude           6=Al De Baran   7=Lutie       8=Comodo     9=Juno";
+	dispbottom "10=Amatsu          11=Gonryun      12=Umbala     13=Nilfheim  14=Louyang";
+	dispbottom "15=Novice Grounds(Prohibited)  16=Prison(Prohibited)       17=Jawaii     18=Ayothaya  19=EinBroch";
+	dispbottom "20=Lighthalzen     21=Einbech      22=Hugel      23=Rachel    24=Veins";
+	dispbottom "25=Moscovia     ";
+	end;
+}
+
+// map name,x,y,level requirement, group id minimum requirement
+if(@warp$ == "0" || @warp$ == "pr" || @warp$ == "pro" || @warp$ == "pron" || @warp$ == "pront" || @warp$ == "prontera") { callsub	Process,"prontera",155,191,0,0; }
+if(@warp$ == "1" || @warp$ == "mor" || @warp$ == "morocc" || @warp$ == "moroc") { callsub	Process,"morocc",159,53,0,0; }
+if(@warp$ == "2" || @warp$ == "gef" || @warp$ == "geffen") { callsub	Process,"geffen",119,59,0,0; }
+if(@warp$ == "3" || @warp$ == "pay" || @warp$ == "payo" || @warp$ == "payon") { callsub	Process,"payon",177,101,0,0; }
+if(@warp$ == "4" || @warp$ == "al" || @warp$ == "alb" || @warp$ == "alberta") { callsub	Process,"alberta",192,147,0,0; }
+if(@warp$ == "5" || @warp$ == "iz" || @warp$ == "izl" || @warp$ == "izlude") { callsub	Process,"izlude",128,114,0,0; }
+if(@warp$ == "6" || @warp$ == "ald" || @warp$ == "alde" || @warp$ == "aldebaran") { callsub	Process,"aldebaran",140,131,0,0; }
+if(@warp$ == "7" || @warp$ == "xmas" || @warp$ == "lutie") { callsub	Process,"xmas",147,134,0,0; }
+if(@warp$ == "8" || @warp$ == "co" || @warp$ == "com" || @warp$ == "comodo") { callsub	Process,"comodo",209,143,0,0; }
+if(@warp$ == "9" || @warp$ == "ju" || @warp$ == "yu" || @warp$ == "juno" || @warp$ == "yuno") { callsub	Process,"yuno",157,51,0,0; }
+if(@warp$ == "10" || @warp$ == "ama" || @warp$ == "amat" || @warp$ == "amatsu") { callsub	Process,"amatsu",198,84,0,0; }
+if(@warp$ == "11" || @warp$ == "gon" || @warp$ == "gonr" || @warp$ == "gonryun") { callsub	Process,"gonryun",160,120,0,0; }
+if(@warp$ == "12" || @warp$ == "um" || @warp$ == "umb" || @warp$ == "umbala") { callsub	Process,"umbala",89,157,0,0; }
+if(@warp$ == "13" || @warp$ == "nif" || @warp$ == "nifl" || @warp$ == "niflh" || @warp$ == "niflheim") { callsub	Process,"niflheim",21,153,0,0; }
+if(@warp$ == "14" || @warp$ == "lou" || @warp$ == "ly" || @warp$ == "louyang") { callsub	Process,"louyang",217,40,0,0; }
+if(@warp$ == "15" || @warp$ == "nov" || @warp$ == "ng") { callsub	Process,"new_1-1",53,111,0,10; }	// Novice Grounds : GM Group 10 or higher only.
+if(@warp$ == "16" || @warp$ == "jail" || @warp$ == "prison") { callsub	Process,"sec_pri",23,61,0,10;}		// Prison: GM Group 10 or higher only.
+if(@warp$ == "17" || @warp$ == "jaw" || @warp$ == "jawa" || @warp$ == "jawaii") { callsub	Process,"jawaii",249,127,0,0; }
+if(@warp$ == "18" || @warp$ == "ayo" || @warp$ == "aya" || @warp$ == "ayothoya" || @warp$ == "ayathoya" || @warp$ == "ayothaya") { callsub	Process,"ayothaya",151,117,0,0; }
+if(@warp$ == "19" || @warp$ == "ein" || @warp$ == "ein1" || @warp$ == "einbr" || @warp$ == "einbro" || @warp$ == "einbroch") { callsub	Process,"einbroch",64,200,0,0; }
+if(@warp$ == "20" || @warp$ == "lhz" || @warp$ == "light" || @warp$ == "lighthalzen") { callsub	Process,"lighthalzen",158,92,0,0; }
+if(@warp$ == "21" || @warp$ == "einbe" || @warp$ == "ein2" || @warp$ == "einbech") { callsub	Process,"einbech",70,95,0,0; }
+if(@warp$ == "22" || @warp$ == "hu" || @warp$ == "hug" || @warp$ == "hugel") { callsub	Process,"hugel",96,145,0,0; }
+if(@warp$ == "23" || @warp$ == "ra" || @warp$ == "rach" || @warp$ == "rachel") { callsub	Process,"rachel",130,110,0,0; }
+if(@warp$ == "24" || @warp$ == "ve" || @warp$ == "vei" || @warp$ == "vein" || @warp$ == "veins") { callsub	Process,"veins",216,123,0,0; }
+if(@warp$ == "25" || @warp$ == "mosc" || @warp$ == "mosk" || @warp$ == "mosco" || @warp$ == "moscov" || @warp$ == "moscovia") { callsub	Process,"moscovia",223,184,0,0; }
+
+// Custom @go locations below. Also edit them in or out of the master list found towards the top of this script file.
+else {
+	dispbottom "[Server] : To use @go, enter a number 0 or greater. For a full list of available warps, type '@go list'.";
+	end;
+}
+	Process:
+		set @group,getarg(4);
+		set @lvl,getarg(3);
+		set @mapname$,getarg(0);
+		set @x,getarg(1);
+		set @y,getarg(2);
+		if(@lvl < 255) { if(BaseLevel < @lvl) { dispbottom "[Server] : You need to be at least base level 255 to use this command. Please talk to the npc provided first."; end;} }		
+		if(@group > 0) { if(getgroupid() < @group) { dispbottom "[Server] : This map cannot be accessed by your group/account level."; end;} }
+		
+		warp @mapname$,@x,@y;
+		end;
+}

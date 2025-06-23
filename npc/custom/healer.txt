@@ -1,0 +1,86 @@
+clangroup,244,46,5	script	Healer::healerdup	569,{
+//OnTouch:
+    while(getbrokenid(1))
+    repair(1);
+sc_end sc_stone;
+sc_end sc_freeze;
+sc_end sc_sleep;
+sc_end sc_curse;
+sc_end sc_silence;
+sc_end sc_confusion;
+sc_end sc_blind;
+sc_end sc_bleeding;
+sc_end sc_decreaseagi;
+sc_end sc_poison;
+sc_end sc_hallucination;
+sc_end sc_stripweapon;
+sc_end sc_striparmor;
+sc_end sc_striphelm;
+sc_end sc_stripshield;
+sc_end sc_berserk;
+    sc_start SC_INCREASEAGI,240000,10;
+    sc_start SC_BLESSING,240000,10;
+
+
+    set @maxhp,readparam(6);
+    set @curhp,readparam(5);
+    set @heal,@maxhp-@curhp;
+    skilleffect 28,@heal;
+    percentheal 100,100;
+
+// === Put Buffs below for premium users ===
+	if((getgroupid() <= 0)) end;
+		sc_start SC_FOOD_STR_CASH,1800000,10;
+		sc_start SC_FOOD_AGI_CASH,1800000,10;
+		sc_start SC_FOOD_VIT_CASH,1800000,10;
+		sc_start SC_FOOD_INT_CASH,1800000,10;
+		sc_start SC_FOOD_DEX_CASH,1800000,10;
+		sc_start SC_FOOD_LUK_CASH,1800000,10;
+		specialeffect2 EF_ANGELUS;
+		sc_start SC_ANGELUS,240000,10;	
+		specialeffect2 EF_GLORIA;
+		sc_start SC_GLORIA,240000,10;
+		sc_start SC_IMPOSITIO,240000,10;
+		sc_start SC_MAGNIFICAT,240000,10;
+		sc_start SC_ASSUMPTIO,240000,10;
+
+  
+}
+
+
+alberta,25,240,6	duplicate(healerdup)	Healer#alb	569
+aldebaran,135,118,6	duplicate(healerdup)	Healer#alde	569
+amatsu,200,79,4	duplicate(healerdup)	Healer#ama	569
+ayothaya,207,169,6	duplicate(healerdup)	Healer#ayo	569
+brasilis,194,221,6	duplicate(healerdup)	Healer#bra	569
+comodo,184,158,6	duplicate(healerdup)	Healer#com	569
+dewata,193,175,6	duplicate(healerdup)	Healer#dew	569
+eclage,105,35,4	duplicate(healerdup)	Healer#ecl	569
+einbech,142,244,4	duplicate(healerdup)	Healer#einbe	569
+einbroch,57,202,6	duplicate(healerdup)	Healer#einbr	569
+dicastes01,201,194,4	duplicate(healerdup)	Healer#dic	569
+geffen,115,72,6	duplicate(healerdup)	Healer#gef	569
+gonryun,156,122,6	duplicate(healerdup)	Healer#gon	569
+hugel,89,150,6	duplicate(healerdup)	Healer#hug	569
+izlude,125,118,5	duplicate(healerdup)	Healer#izl	569
+lighthalzen,149,103,6	duplicate(healerdup)	Healer#li	569
+louyang,225,103,4	duplicate(healerdup)	Healer#lou	569
+malangdo,226,188,4	duplicate(healerdup)	Healer#mal	569
+malaya,205,205,6	duplicate(healerdup)	Healer#malay	569
+manuk,256,176,6	duplicate(healerdup)	Healer#man	569
+mid_camp,203,289,6	duplicate(healerdup)	Healer#mid	569
+mora,106,100,6	duplicate(healerdup)	Healer#mora	569
+morocc,153,97,6	duplicate(healerdup)	Healer#mor	569
+moscovia,215,194,6	duplicate(healerdup)	Healer#mos	569
+niflheim,188,180,5	duplicate(healerdup)	Healer#nif	569
+payon,179,106,4	duplicate(healerdup)	Healer#pay	569
+prontera,160,186,4	duplicate(healerdup)	Healer#pront	569
+rachel,125,116,6	duplicate(healerdup)	Healer#rac	569
+splendide,201,153,4	duplicate(healerdup)	Healer#spl	569
+thor_camp,249,74,4	duplicate(healerdup)	Healer#thor	569
+umbala,129,132,4	duplicate(healerdup)	Healer#umb	569
+veins,217,121,4	duplicate(healerdup)	Healer#ve	569
+xmas,143,136,6	duplicate(healerdup)	Healer#xmas	569
+yuno,164,45,4	duplicate(healerdup)	Healer#yuno	569
+sec_in02,145,169,4	duplicate(healerdup)	Healer#sec	569
+
